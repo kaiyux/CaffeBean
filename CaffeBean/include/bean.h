@@ -16,6 +16,16 @@ public:
     Bean();
 
     Bean(int num, int channel, int height, int width);
+
+    int N();
+
+    int C();
+
+    int H();
+
+    int W();
+
+    int getSize();
 };
 
 #endif //CAFFEBEAN_BEAN_H
