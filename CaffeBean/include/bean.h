@@ -5,12 +5,16 @@
 #ifndef CAFFEBEAN_BEAN_H
 #define CAFFEBEAN_BEAN_H
 
-class Bean{
+#include "common.h"
+
+class Bean {
 private:
-    int data;
+    int size;
+    std::vector<int> shape = std::vector<int>(4);
+    float *data, *diff;
 public:
     Bean();
-    void set_data();
+    Bean(int num, int channel, int height, int width);
 };
 
 #endif //CAFFEBEAN_BEAN_H
