@@ -4,7 +4,7 @@
 
 #include "../../include/layers/test_layer.h"
 
-TestLayer::TestLayer(const std::string& name) : Layer(name) {
+TestLayer::TestLayer(const std::string &name) : Layer(name) {
     std::cout << "creating TestLayer: " << name << " ..." << std::endl;
 }
 

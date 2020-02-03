@@ -8,14 +8,18 @@
 #include "common.h"
 #include "layer.h"
 
-class Net{
+class Net {
 private:
     std::vector<std::unique_ptr<Layer>> layers;
 public:
     Net();
+
     ~Net();
+
     Bean forward();
+
     Bean backward();
+
     void print_net();
 };
 

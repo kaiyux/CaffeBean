@@ -11,7 +11,7 @@ class FullyConnectedLayer : public Layer {
 private:
     double k, b;
 public:
-    FullyConnectedLayer(const std::string& name);
+    FullyConnectedLayer(const std::string &name);
 
     Bean forward();
 

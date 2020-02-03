@@ -9,7 +9,7 @@
 
 class TestLayer : public Layer {
 public:
-    TestLayer(const std::string& name);
+    TestLayer(const std::string &name);
 
     Bean forward();
 

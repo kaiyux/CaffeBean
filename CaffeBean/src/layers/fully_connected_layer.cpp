@@ -4,7 +4,7 @@
 
 #include "../../include/layers/fully_connected_layer.h"
 
-FullyConnectedLayer::FullyConnectedLayer(const std::string& name) : Layer(name) {
+FullyConnectedLayer::FullyConnectedLayer(const std::string &name) : Layer(name) {
     std::cout << "creating FullyConnectedLayer: " << name << " ..." << std::endl;
     k = 0.1;
     b = 0.1;

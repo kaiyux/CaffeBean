@@ -14,6 +14,7 @@ private:
     float *data, *diff;
 public:
     Bean();
+
     Bean(int num, int channel, int height, int width);
 };
 
