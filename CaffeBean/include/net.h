@@ -16,9 +16,11 @@ public:
 
     ~Net();
 
+    void init_net();
+
     Bean *forward();
 
-    Bean *backward();
+    void backward();
 
     void print_net();
 };

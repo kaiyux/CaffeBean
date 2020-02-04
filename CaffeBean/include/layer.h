@@ -5,9 +5,9 @@
 #ifndef CAFFEBEAN_LAYER_H
 #define CAFFEBEAN_LAYER_H
 
-
 #include "bean.h"
 #include "common.h"
+#include "random_init.h"
 
 class Layer {
 private:
@@ -17,7 +17,7 @@ private:
 public:
     Layer(std::string name);
 
-    ~Layer();
+    virtual ~Layer();
 
     Bean *get_top();
 

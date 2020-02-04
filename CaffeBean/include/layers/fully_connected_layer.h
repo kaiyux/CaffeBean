@@ -15,11 +15,18 @@ private:
 public:
     FullyConnectedLayer(const std::string &name, int in_features, int out_features, bool has_bias);
 
+    ~FullyConnectedLayer();
+
     void init_layer();
 
     Bean *forward(Bean *bottom);
 
     Bean *backward(Bean *top);
+
+    Bean *get_weight();
+
+    Bean *get_bias();
+
 };
 
 #endif //CAFFEBEAN_FULLY_CONNECTED_LAYER_H

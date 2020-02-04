@@ -15,8 +15,8 @@ Bean::Bean(int num, int channel, int height, int width) {
     shape_[2] = height;
     shape_[3] = width;
     size_ = num * channel * height * width;
-    data_ = new float[size_];
-    diff_ = new float[size_];
+    data_ = new float[size_]();
+    diff_ = new float[size_]();
 }
 
 Bean::Bean(std::vector<int> shape) {
@@ -25,8 +25,13 @@ Bean::Bean(std::vector<int> shape) {
     for (auto s:shape_) {
         size_ *= s;
     }
-    data_ = new float[size_];
-    diff_ = new float[size_];
+    data_ = new float[size_]();
+    diff_ = new float[size_]();
+}
+
+Bean::~Bean() {
+    delete[] data_;
+    delete[] diff_;
 }
 
 int Bean::N() {

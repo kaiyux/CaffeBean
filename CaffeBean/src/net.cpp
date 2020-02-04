@@ -14,9 +14,7 @@ Net::Net() {
     layers_.push_back(std::move(fc2));
 }
 
-Net::~Net() {
-    std::cout << "cleaning..." << std::endl;
-}
+Net::~Net() {}
 
 void Net::print_net() {
     std::cout << "----------------------" << std::endl;
@@ -25,6 +23,12 @@ void Net::print_net() {
         std::cout << layer->get_name() << std::endl;
     }
     std::cout << "----------------------" << std::endl;
+}
+
+void Net::init_net() {
+    for (auto &layer:layers_) {
+        layer->init_layer();
+    }
 }
 
 Bean *Net::forward() {
@@ -36,12 +40,11 @@ Bean *Net::forward() {
     return curBottom;
 }
 
-Bean *Net::backward() {
+void Net::backward() {
     Bean *curTop = new Bean(); //TODO: should be the bottom of loss layer there
     for (int i = layers_.size() - 1; i >= 0; --i) {
         layers_[i]->backward(curTop);
         curTop = layers_[i]->get_bottom();
     }
-    return curTop;
 }
 

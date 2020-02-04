@@ -12,10 +12,25 @@ FullyConnectedLayer::FullyConnectedLayer(const std::string &name, int in_feature
     has_bias_ = has_bias;
     std::vector<int> weight_shape = {in_features_, out_features_};
     weight_ = new Bean(weight_shape);
+    if (has_bias_) {
+        bias_ = new Bean(weight_shape);
+    }
+}
+
+FullyConnectedLayer::~FullyConnectedLayer() {
+    std::cout << "layer " << get_name() << " deleted" << std::endl;
+    delete weight_;
+    if (has_bias_) {
+        delete bias_;
+    }
 }
 
 void FullyConnectedLayer::init_layer() {
-
+    std::cout << "initializing FullyConnectedLayer: " << get_name() << " ..." << std::endl;
+    random_init_zero_one(weight_);
+    if (has_bias_) {
+        random_init_zero_one(bias_);
+    }
 }
 
 Bean *FullyConnectedLayer::forward(Bean *bottom) {
@@ -26,6 +41,14 @@ Bean *FullyConnectedLayer::forward(Bean *bottom) {
 Bean *FullyConnectedLayer::backward(Bean *top) {
     std::cout << get_name() << " backward" << std::endl;
     return get_bottom();
+}
+
+Bean *FullyConnectedLayer::get_weight() {
+    return weight_;
+}
+
+Bean *FullyConnectedLayer::get_bias() {
+    return bias_;
 }
 
 

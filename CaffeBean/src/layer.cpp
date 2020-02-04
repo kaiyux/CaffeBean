@@ -9,9 +9,7 @@ Layer::Layer(std::string name) {
     name_ = name;
 }
 
-Layer::~Layer() {
-    std::cout << "Layer " << name_ << " deleted" << std::endl;
-}
+Layer::~Layer() {}
 
 Bean *Layer::get_top() {
     return top_;

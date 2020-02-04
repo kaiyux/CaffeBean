@@ -15,6 +15,8 @@ private:
 public:
     Bean();
 
+    ~Bean();
+
     Bean(int num, int channel, int height, int width);
 
     Bean(std::vector<int> shape);
