@@ -6,36 +6,22 @@
 
 
 Layer::Layer(std::string name) {
-    set_name(name);
+    name_ = name;
 }
 
 Layer::~Layer() {
-    std::cout << "Layer " << this->name << " deleted" << std::endl;
+    std::cout << "Layer " << name_ << " deleted" << std::endl;
 }
 
 Bean *Layer::get_top() {
-    return this->top;
+    return top_;
 }
 
 Bean *Layer::get_bottom() {
-    return this->bottom;
+    return bottom_;
 }
 
 
 std::string Layer::get_name() {
-    return this->name;
+    return name_;
 }
-
-void Layer::set_name(std::string name) {
-    this->name = name;
-}
-
-Bean *Layer::forward(Bean *bottom) {
-    return this->get_top();
-}
-
-Bean *Layer::backward(Bean *top) {
-    return this->get_bottom();
-}
-
-

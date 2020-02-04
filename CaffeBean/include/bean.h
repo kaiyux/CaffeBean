@@ -9,13 +9,15 @@
 
 class Bean {
 private:
-    int size;
-    std::vector<int> shape = std::vector<int>(4);
-    float *data, *diff;
+    int size_;
+    std::vector<int> shape_;
+    float *data_, *diff_;
 public:
     Bean();
 
     Bean(int num, int channel, int height, int width);
+
+    Bean(std::vector<int> shape);
 
     int N();
 

@@ -10,7 +10,7 @@
 
 class Net {
 private:
-    std::vector<std::unique_ptr<Layer>> layers;
+    std::vector<std::unique_ptr<Layer>> layers_;
 public:
     Net();
 

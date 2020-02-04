@@ -11,9 +11,9 @@
 
 class Layer {
 private:
-    Bean *top;
-    Bean *bottom;
-    std::string name;
+    Bean *top_;
+    Bean *bottom_;
+    std::string name_;
 public:
     Layer(std::string name);
 
@@ -25,11 +25,11 @@ public:
 
     std::string get_name();
 
-    void set_name(std::string name);
+    virtual void init_layer() = 0;
 
-    virtual Bean *forward(Bean *bottom);
+    virtual Bean *forward(Bean *bottom) = 0;
 
-    virtual Bean *backward(Bean *top);
+    virtual Bean *backward(Bean *top) = 0;
 };
 
 #endif //CAFFEBEAN_LAYER_H

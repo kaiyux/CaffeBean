@@ -9,9 +9,13 @@
 
 class FullyConnectedLayer : public Layer {
 private:
-    double k, b;
+    int in_features_, out_features_;
+    bool has_bias_;
+    Bean *weight_, *bias_;
 public:
-    FullyConnectedLayer(const std::string &name);
+    FullyConnectedLayer(const std::string &name, int in_features, int out_features, bool has_bias);
+
+    void init_layer();
 
     Bean *forward(Bean *bottom);
 

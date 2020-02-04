@@ -4,42 +4,55 @@
 
 #include "../include/bean.h"
 
+#include <utility>
+
 Bean::Bean() {}
 
 Bean::Bean(int num, int channel, int height, int width) {
-    shape[0] = num;
-    shape[1] = channel;
-    shape[2] = height;
-    shape[3] = width;
-    size = num * channel * height * width;
-    data = new float[size];
-    diff = new float[size];
+    shape_ = std::vector<int>(4);
+    shape_[0] = num;
+    shape_[1] = channel;
+    shape_[2] = height;
+    shape_[3] = width;
+    size_ = num * channel * height * width;
+    data_ = new float[size_];
+    diff_ = new float[size_];
+}
+
+Bean::Bean(std::vector<int> shape) {
+    shape_ = std::move(shape);
+    size_ = 1;
+    for (auto s:shape_) {
+        size_ *= s;
+    }
+    data_ = new float[size_];
+    diff_ = new float[size_];
 }
 
 int Bean::N() {
-    return this->shape[0];
+    return this->shape_[0];
 }
 
 int Bean::C() {
-    return this->shape[1];
+    return this->shape_[1];
 }
 
 int Bean::H() {
-    return this->shape[2];
+    return this->shape_[2];
 }
 
 int Bean::W() {
-    return this->shape[3];
+    return this->shape_[3];
 }
 
 int Bean::getSize() {
-    return this->size;
+    return this->size_;
 }
 
 float *Bean::getData() {
-    return this->data;
+    return this->data_;
 }
 
 float *Bean::getDiff() {
-    return this->diff;
+    return this->diff_;
 }
