@@ -9,12 +9,13 @@
 using namespace std;
 
 TEST(Bean, ExampleBean) {
-    Bean *bean = new Bean(10, 3, 256, 256);
-    EXPECT_EQ(bean->N(), 10); //EXPECT_* fail, test continues
-    ASSERT_EQ(bean->C(), 3); //ASSERT_* fail, test interrupts
-    ASSERT_EQ(bean->H(), 256); //ASSERT_* fail, test interrupts
-    ASSERT_EQ(bean->W(), 256); //ASSERT_* fail, test interrupts
-    ASSERT_EQ(bean->getSize(), 10 * 3 * 256 * 256);
+    int testNum = 10, testChannel = 3, testHeight = 256, testWidth = 256;
+    Bean *bean = new Bean(testNum, testChannel, testHeight, testWidth);
+    EXPECT_EQ(bean->N(), testNum); //EXPECT_* fail, test continues
+    ASSERT_EQ(bean->C(), testChannel); //ASSERT_* fail, test interrupts
+    ASSERT_EQ(bean->H(), testHeight); //ASSERT_* fail, test interrupts
+    ASSERT_EQ(bean->W(), testWidth); //ASSERT_* fail, test interrupts
+    ASSERT_EQ(bean->getSize(), testNum * testChannel * testHeight * testWidth);
 }
 
 TEST(Layer, ExampleLayer) {

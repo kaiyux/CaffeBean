@@ -16,9 +16,9 @@ public:
 
     ~Net();
 
-    Bean forward();
+    Bean *forward();
 
-    Bean backward();
+    Bean *backward();
 
     void print_net();
 };

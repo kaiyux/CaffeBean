@@ -12,8 +12,8 @@ Bean::Bean(int num, int channel, int height, int width) {
     shape[2] = height;
     shape[3] = width;
     size = num * channel * height * width;
-    data = (float *) std::calloc(size, size * sizeof(float));
-    diff = (float *) std::calloc(size, size * sizeof(float));
+    data = new float[size];
+    diff = new float[size];
 }
 
 int Bean::N() {
@@ -34,4 +34,12 @@ int Bean::W() {
 
 int Bean::getSize() {
     return this->size;
+}
+
+float *Bean::getData() {
+    return this->data;
+}
+
+float *Bean::getDiff() {
+    return this->diff;
 }

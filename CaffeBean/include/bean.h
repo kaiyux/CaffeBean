@@ -26,6 +26,10 @@ public:
     int W();
 
     int getSize();
+
+    float *getData();
+
+    float *getDiff();
 };
 
 #endif //CAFFEBEAN_BEAN_H

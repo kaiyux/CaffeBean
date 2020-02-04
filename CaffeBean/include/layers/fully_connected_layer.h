@@ -13,9 +13,9 @@ private:
 public:
     FullyConnectedLayer(const std::string &name);
 
-    Bean forward();
+    Bean *forward(Bean *bottom);
 
-    Bean backward();
+    Bean *backward(Bean *top);
 };
 
 #endif //CAFFEBEAN_FULLY_CONNECTED_LAYER_H
