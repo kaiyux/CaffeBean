@@ -11,9 +11,9 @@
 inline void random_init_zero_one(Bean *bean) {
     std::default_random_engine e;
     std::uniform_real_distribution<double> u(0.0, 1.0);
-    for (int i = 0; i < bean->getSize(); ++i) {
-        bean->getData()[i] = u(e);
-        bean->getDiff()[i] = u(e);
+    for (int i = 0; i < bean->size_; ++i) {
+        bean->data_[i] = u(e);
+        bean->diff_[i] = u(e);
     }
 }
 

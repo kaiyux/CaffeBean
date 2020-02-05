@@ -11,7 +11,7 @@
 #include "math_function.h"
 
 class Layer {
-private:
+protected:
     Bean *top_;
     Bean *bottom_;
     std::string name_;

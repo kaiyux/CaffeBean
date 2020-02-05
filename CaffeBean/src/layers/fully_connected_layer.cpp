@@ -18,7 +18,7 @@ FullyConnectedLayer::FullyConnectedLayer(const std::string &name, int in_feature
 }
 
 FullyConnectedLayer::~FullyConnectedLayer() {
-    std::cout << "layer " << get_name() << " deleted" << std::endl;
+    std::cout << "layer " << name_ << " deleted" << std::endl;
     delete weight_;
     if (has_bias_) {
         delete bias_;
@@ -26,7 +26,7 @@ FullyConnectedLayer::~FullyConnectedLayer() {
 }
 
 void FullyConnectedLayer::init_layer() {
-    std::cout << "initializing FullyConnectedLayer: " << get_name() << " ..." << std::endl;
+    std::cout << "initializing FullyConnectedLayer: " << name_ << " ..." << std::endl;
     random_init_zero_one(weight_);
     if (has_bias_) {
         random_init_zero_one(bias_);
@@ -34,13 +34,15 @@ void FullyConnectedLayer::init_layer() {
 }
 
 Bean *FullyConnectedLayer::forward(Bean *bottom) {
-    std::cout << get_name() << " forward" << std::endl;
-    return get_top();
+    std::cout << name_ << " forward" << std::endl;
+    bottom_ = bottom;
+//    assert(bottom_->shape_.back() == in_features_);
+    return top_;
 }
 
 Bean *FullyConnectedLayer::backward(Bean *top) {
-    std::cout << get_name() << " backward" << std::endl;
-    return get_bottom();
+    std::cout << name_ << " backward" << std::endl;
+    return bottom_;
 }
 
 Bean *FullyConnectedLayer::get_weight() {

@@ -49,15 +49,3 @@ int Bean::H() {
 int Bean::W() {
     return this->shape_[3];
 }
-
-int Bean::getSize() {
-    return this->size_;
-}
-
-float *Bean::getData() {
-    return this->data_;
-}
-
-float *Bean::getDiff() {
-    return this->diff_;
-}

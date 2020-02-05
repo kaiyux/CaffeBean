@@ -8,11 +8,11 @@
 #include "common.h"
 
 class Bean {
-private:
+public:
     int size_;
     std::vector<int> shape_;
     float *data_, *diff_;
-public:
+
     Bean();
 
     ~Bean();
@@ -28,12 +28,6 @@ public:
     int H();
 
     int W();
-
-    int getSize();
-
-    float *getData();
-
-    float *getDiff();
 };
 
 #endif //CAFFEBEAN_BEAN_H

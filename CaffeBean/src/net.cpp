@@ -3,6 +3,7 @@
 //
 
 #include <layers/fully_connected_layer.h>
+#include <layers/input_layer.h>
 #include "../include/net.h"
 
 
@@ -32,7 +33,10 @@ void Net::init_net() {
 }
 
 Bean *Net::forward() {
-    Bean *curBottom = new Bean(); //TODO: should be the top of input layer there
+    std::unique_ptr<InputLayer> input_layer(new InputLayer("input_layer"));
+    std::vector<int> input_shape = {5, 10};
+    input_layer->random_init(input_shape);
+    Bean *curBottom = input_layer->get_top();
     for (auto &layer : layers_) {
         layer->forward(curBottom);
         curBottom = layer->get_top();

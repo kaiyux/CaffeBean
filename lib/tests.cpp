@@ -17,14 +17,14 @@ TEST(Bean, NCHW_init_bean) {
     ASSERT_EQ(bean->C(), testChannel); //ASSERT_* fail, test interrupts
     ASSERT_EQ(bean->H(), testHeight); //ASSERT_* fail, test interrupts
     ASSERT_EQ(bean->W(), testWidth); //ASSERT_* fail, test interrupts
-    ASSERT_EQ(bean->getSize(), testNum * testChannel * testHeight * testWidth);
+    ASSERT_EQ(bean->size_, testNum * testChannel * testHeight * testWidth);
     delete bean;
 }
 
 TEST(Bean, vector_init_bean) {
     vector<int> shape = {1, 2, 3, 4, 5, 6};
     Bean *bean = new Bean(shape);
-    ASSERT_EQ(bean->getSize(), 1 * 2 * 3 * 4 * 5 * 6);
+    ASSERT_EQ(bean->size_, 1 * 2 * 3 * 4 * 5 * 6);
     delete bean;
 }
 

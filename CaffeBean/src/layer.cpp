@@ -19,7 +19,6 @@ Bean *Layer::get_bottom() {
     return bottom_;
 }
 
-
 std::string Layer::get_name() {
     return name_;
 }
