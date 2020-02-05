@@ -6,6 +6,7 @@
 #include <iostream>
 #include "../CaffeBean/include/bean.h"
 #include "../CaffeBean/include/layers/fully_connected_layer.h"
+#include "../CaffeBean/include/math_function.h"
 
 using namespace std;
 
@@ -33,4 +34,8 @@ TEST(FullyConnectedLayer, layer_test) {
     FullyConnectedLayer *fc = new FullyConnectedLayer("test_fc", in_features, out_features, has_bias);
     ASSERT_EQ(fc->get_name(), "test_fc");
     delete fc;
+}
+
+TEST(Math_fuction, math_test) {
+    Eigen_test();
 }

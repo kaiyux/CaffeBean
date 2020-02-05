@@ -8,6 +8,7 @@
 #include "bean.h"
 #include "common.h"
 #include "random_init.h"
+#include "math_function.h"
 
 class Layer {
 private:
