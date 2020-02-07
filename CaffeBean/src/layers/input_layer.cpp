@@ -28,5 +28,5 @@ Bean *InputLayer::backward(Bean *top) {
 
 void InputLayer::random_init(std::vector<int> &shape) {
     top_ = new Bean(shape);
-    random_init_zero_one(top_);
+    normal(top_);
 }

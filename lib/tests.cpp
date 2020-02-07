@@ -10,6 +10,7 @@
 
 using namespace std;
 
+// -------------------- Bean --------------------
 TEST(Bean, NCHW_init_bean) {
     int testNum = 10, testChannel = 3, testHeight = 256, testWidth = 256;
     Bean *bean = new Bean(testNum, testChannel, testHeight, testWidth);
@@ -25,24 +26,11 @@ TEST(Bean, vector_init_bean) {
     vector<int> shape = {1, 2, 3, 4, 5, 6};
     Bean *bean = new Bean(shape);
     ASSERT_EQ(bean->size_, 1 * 2 * 3 * 4 * 5 * 6);
-
-    cout << "random init" << endl;
-    random_init_zero_one(bean);
-    for (int i = 0; i < bean->size_; ++i) {
-        cout << bean->data_[i] << " ";
-    }
-    cout << endl;
-
-    cout << "init all to zero" << endl;
-    init_all_zero(bean);
-    for (int i = 0; i < bean->size_; ++i) {
-        cout << bean->data_[i] << " ";
-    }
-    cout << endl;
-
     delete bean;
 }
+// -------------------- Bean --------------------
 
+// -------------------- FullyConnectedLayer --------------------
 TEST(FullyConnectedLayer, layer_init_test) {
     int in_features = 10, out_features = 20;
     bool has_bias = true;
@@ -53,6 +41,8 @@ TEST(FullyConnectedLayer, layer_init_test) {
 
 TEST(FullyConnectedLayer, layer_forward_test) {
     Bean *input = new Bean({2, 3});
+    normal(input);
+
     int in_features = 3, out_features = 5;
     bool has_bias = true;
     FullyConnectedLayer *fc = new FullyConnectedLayer("test_fc", in_features, out_features, has_bias);
@@ -66,11 +56,16 @@ TEST(FullyConnectedLayer, layer_forward_test) {
                    fc->get_bottom()->shape_.back());
     display_matrix("fc->weight", fc->get_weight()->data_,
                    fc->get_weight()->shape_[0], fc->get_weight()->shape_[1]);
+    display_matrix("fc->bias", fc->get_bias()->data_,
+                   fc->get_top()->size_ / fc->get_top()->shape_.back(),
+                   fc->get_top()->shape_.back());
     display_matrix("fc->top", fc->get_top()->data_,
                    fc->get_top()->size_ / fc->get_top()->shape_.back(),
                    fc->get_top()->shape_.back());
 }
+// -------------------- FullyConnectedLayer --------------------
 
+// -------------------- Math_fuction --------------------
 TEST(Math_fuction, Eigen_test) {
     Eigen_test();
 }
@@ -90,3 +85,55 @@ TEST(Math_fuction, matrix_multiply) {
     delete[]b;
     delete[]c;
 }
+// -------------------- Math_fuction --------------------
+
+// -------------------- Init --------------------
+TEST(Init, constant) {
+    vector<int> shape = {1, 2, 3, 4, 5, 6};
+    Bean *bean = new Bean(shape);
+    float val = 6.6;
+    constant(bean, val);
+    for (int i = 0; i < bean->size_; ++i) {
+        ASSERT_EQ(bean->data_[i], val);
+        ASSERT_EQ(bean->diff_[i], val);
+    }
+}
+
+TEST(Init, ones) {
+    vector<int> shape = {1, 2, 3, 4, 5, 6};
+    Bean *bean = new Bean(shape);
+    float val = 1;
+    ones(bean);
+    for (int i = 0; i < bean->size_; ++i) {
+        ASSERT_EQ(bean->data_[i], val);
+        ASSERT_EQ(bean->diff_[i], val);
+    }
+}
+
+TEST(Init, zeros) {
+    vector<int> shape = {1, 2, 3, 4, 5, 6};
+    Bean *bean = new Bean(shape);
+    float val = 0;
+    zeros(bean);
+    for (int i = 0; i < bean->size_; ++i) {
+        ASSERT_EQ(bean->data_[i], val);
+        ASSERT_EQ(bean->diff_[i], val);
+    }
+}
+
+TEST(Init, eye) {
+    vector<int> shape = {4, 5};
+    Bean *bean = new Bean(shape);
+    eye(bean);
+    display_matrix("eye", bean->data_, 4, 5);
+}
+
+TEST(Init, normal) {
+    vector<int> shape = {4, 5};
+    Bean *bean = new Bean(shape);
+    normal(bean);
+    display_matrix("normal", bean->data_, 4, 5);
+    normal(bean, 10, 1);
+    display_matrix("normal", bean->data_, 4, 5);
+}
+// -------------------- Init --------------------

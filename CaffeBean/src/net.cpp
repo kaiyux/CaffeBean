@@ -45,10 +45,10 @@ Bean *Net::forward() {
 }
 
 void Net::backward() {
-    Bean *curTop = new Bean(); //TODO: should be the bottom of loss layer there
+    Bean *curTop;
     for (int i = layers_.size() - 1; i >= 0; --i) {
-        layers_[i]->backward(curTop);
         curTop = layers_[i]->get_bottom();
+        layers_[i]->backward(curTop);
     }
 }
 

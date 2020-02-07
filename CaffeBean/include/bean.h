@@ -13,8 +13,6 @@ public:
     std::vector<int> shape_;
     float *data_, *diff_;
 
-    Bean();
-
     ~Bean();
 
     Bean(int num, int channel, int height, int width);

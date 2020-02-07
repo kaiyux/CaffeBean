@@ -27,9 +27,9 @@ FullyConnectedLayer::~FullyConnectedLayer() {
 
 void FullyConnectedLayer::init_layer() {
     std::cout << "initializing FullyConnectedLayer: " << name_ << " ..." << std::endl;
-    random_init_zero_one(weight_);
+    normal(weight_);
     if (has_bias_) {
-        random_init_zero_one(bias_);
+        normal(bias_);
     }
 }
 
