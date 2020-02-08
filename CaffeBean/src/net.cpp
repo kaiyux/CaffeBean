@@ -8,7 +8,7 @@
 
 
 Net::Net() {
-    std::cout << "constructing net..." << std::endl;
+    CAFFEBEAN_LOG("constructing net...");
     std::unique_ptr<Layer> fc1(new FullyConnectedLayer("fc1", 10, 20, true));
     layers_.push_back(std::move(fc1));
     std::unique_ptr<Layer> fc2(new FullyConnectedLayer("fc2", 20, 30, true));
@@ -18,12 +18,12 @@ Net::Net() {
 Net::~Net() {}
 
 void Net::print_net() {
-    std::cout << "----------------------" << std::endl;
-    std::cout << "layers include: " << std::endl;
+    CAFFEBEAN_LOG("----------------------");
+    CAFFEBEAN_LOG("layers include: ");
     for (auto &layer : layers_) {
-        std::cout << layer->get_name() << std::endl;
+        CAFFEBEAN_LOG(layer->get_name());
     }
-    std::cout << "----------------------" << std::endl;
+    CAFFEBEAN_LOG("----------------------");
 }
 
 void Net::init_net() {

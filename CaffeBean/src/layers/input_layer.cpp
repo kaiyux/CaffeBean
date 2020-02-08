@@ -5,11 +5,11 @@
 #include "../../include/layers/input_layer.h"
 
 InputLayer::InputLayer(const std::string &name) : Layer(name) {
-    std::cout << "creating FullyConnectedLayer: " << name << " ..." << std::endl;
+    CAFFEBEAN_LOG("creating FullyConnectedLayer: " << name << " ...");
 }
 
 InputLayer::~InputLayer() {
-    std::cout << "layer " << name_ << " deleted" << std::endl;
+    CAFFEBEAN_LOG("layer " << name_ << " deleted");
     delete top_;
     delete bottom_;
 }
@@ -17,12 +17,12 @@ InputLayer::~InputLayer() {
 void InputLayer::init_layer() {}
 
 Bean *InputLayer::forward(std::vector<Bean *> bottom) {
-    std::cout << name_ << " forward" << std::endl;
+    CAFFEBEAN_LOG(name_ << " forward");
     return top_;
 }
 
 Bean *InputLayer::backward(std::vector<Bean *> top) {
-    std::cout << name_ << " backward" << std::endl;
+    CAFFEBEAN_LOG(name_ << " backward");
     return bottom_;
 }
 

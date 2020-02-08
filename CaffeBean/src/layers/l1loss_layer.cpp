@@ -19,7 +19,7 @@ L1LossLayer::~L1LossLayer() {}
 void L1LossLayer::init_layer() {}
 
 Bean *L1LossLayer::forward(std::vector<Bean *> bottom) {
-    std::cout << name_ << " forward" << std::endl;
+    CAFFEBEAN_LOG(name_ << " forward");
     CAFFEBEAN_ASSERT(bottom.size() == 2,
                      "There should be 2 input.");
     CAFFEBEAN_ASSERT(bottom[0]->shape_ == bottom[1]->shape_,
@@ -29,7 +29,7 @@ Bean *L1LossLayer::forward(std::vector<Bean *> bottom) {
 }
 
 Bean *L1LossLayer::backward(std::vector<Bean *> top) {
-    std::cout << name_ << " backward" << std::endl;
+    CAFFEBEAN_LOG(name_ << " backward");
 }
 
 std::string L1LossLayer::get_reduction() {

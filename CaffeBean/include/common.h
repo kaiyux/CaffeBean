@@ -11,6 +11,7 @@
 #include <vector>
 #include <string>
 
+// Assert
 #define CAFFEBEAN_ASSERT(expression, info)                                             \
     do {                                                                               \
         if(!(expression)){                                                             \
@@ -19,5 +20,13 @@
             abort();                                                                   \
         }                                                                              \
     } while (0)
+
+// Log
+//TODO: can I accept several args at the same time?
+#ifdef DEBUG
+#define CAFFEBEAN_LOG(info) do{std::cout<<info<<std::endl;}while(0)
+#else
+#define CAFFEBEAN_LOG(info) (void)0
+#endif
 
 #endif //CAFFEBEAN_COMMON_H

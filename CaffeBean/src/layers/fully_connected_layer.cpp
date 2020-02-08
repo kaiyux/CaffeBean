@@ -6,7 +6,7 @@
 
 FullyConnectedLayer::FullyConnectedLayer(const std::string &name, int in_features, int out_features, bool has_bias)
         : Layer(name) {
-    std::cout << "creating FullyConnectedLayer: " << name << " ..." << std::endl;
+    CAFFEBEAN_LOG("creating FullyConnectedLayer: " << name);
     in_features_ = in_features;
     out_features_ = out_features;
     has_bias_ = has_bias;
@@ -18,7 +18,7 @@ FullyConnectedLayer::FullyConnectedLayer(const std::string &name, int in_feature
 }
 
 FullyConnectedLayer::~FullyConnectedLayer() {
-    std::cout << "layer " << name_ << " deleted" << std::endl;
+    CAFFEBEAN_LOG("layer " << name_ << " deleted");
     delete weight_;
     if (has_bias_) {
         delete bias_;
@@ -26,7 +26,7 @@ FullyConnectedLayer::~FullyConnectedLayer() {
 }
 
 void FullyConnectedLayer::init_layer() {
-    std::cout << "initializing FullyConnectedLayer: " << name_ << " ..." << std::endl;
+    CAFFEBEAN_LOG("initializing FullyConnectedLayer: " << name_ << " ...");
     normal(weight_);
     if (has_bias_) {
         normal(bias_);
@@ -34,7 +34,7 @@ void FullyConnectedLayer::init_layer() {
 }
 
 Bean *FullyConnectedLayer::forward(std::vector<Bean *> bottom) {
-    std::cout << name_ << " forward" << std::endl; // TODO: I should write a log class?
+    CAFFEBEAN_LOG(name_ << " forward");
     bottom_ = bottom[0];
     CAFFEBEAN_ASSERT(bottom_->shape_.back() == in_features_,
                      bottom_->shape_.back() << " != " << in_features_);
@@ -56,7 +56,7 @@ Bean *FullyConnectedLayer::forward(std::vector<Bean *> bottom) {
 }
 
 Bean *FullyConnectedLayer::backward(std::vector<Bean *> top) {
-    std::cout << name_ << " backward" << std::endl;
+    CAFFEBEAN_LOG(name_ << " backward");
     return bottom_;
 }
 
