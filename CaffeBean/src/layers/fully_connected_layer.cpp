@@ -33,9 +33,9 @@ void FullyConnectedLayer::init_layer() {
     }
 }
 
-Bean *FullyConnectedLayer::forward(Bean *bottom) {
+Bean *FullyConnectedLayer::forward(std::vector<Bean *> bottom) {
     std::cout << name_ << " forward" << std::endl; // TODO: I should write a log class?
-    bottom_ = bottom;
+    bottom_ = bottom[0];
     CAFFEBEAN_ASSERT(bottom_->shape_.back() == in_features_,
                      bottom_->shape_.back() << " != " << in_features_);
 
@@ -55,7 +55,7 @@ Bean *FullyConnectedLayer::forward(Bean *bottom) {
     return top_;
 }
 
-Bean *FullyConnectedLayer::backward(Bean *top) {
+Bean *FullyConnectedLayer::backward(std::vector<Bean *> top) {
     std::cout << name_ << " backward" << std::endl;
     return bottom_;
 }

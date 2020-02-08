@@ -49,7 +49,7 @@ TEST(FullyConnectedLayer, layer_forward_test) {
     FullyConnectedLayer *fc = new FullyConnectedLayer("test_fc", in_features, out_features, has_bias);
 
     fc->init_layer();
-    fc->forward(input);
+    fc->forward({input});
 
     ASSERT_EQ(fc->get_top()->size_, 10);
     display_matrix("fc->bottom", fc->get_bottom()->data_,

@@ -38,7 +38,7 @@ Bean *Net::forward() {
     input_layer->random_init(input_shape);
     Bean *curBottom = input_layer->get_top();
     for (auto &layer : layers_) {
-        layer->forward(curBottom);
+        layer->forward({curBottom});
         curBottom = layer->get_top();
     }
     return curBottom;
@@ -48,7 +48,7 @@ void Net::backward() {
     Bean *curTop;
     for (int i = layers_.size() - 1; i >= 0; --i) {
         curTop = layers_[i]->get_bottom();
-        layers_[i]->backward(curTop);
+        layers_[i]->backward({curTop});
     }
 }
 

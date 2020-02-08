@@ -16,12 +16,12 @@ InputLayer::~InputLayer() {
 
 void InputLayer::init_layer() {}
 
-Bean *InputLayer::forward(Bean *bottom) {
+Bean *InputLayer::forward(std::vector<Bean *> bottom) {
     std::cout << name_ << " forward" << std::endl;
     return top_;
 }
 
-Bean *InputLayer::backward(Bean *top) {
+Bean *InputLayer::backward(std::vector<Bean *> top) {
     std::cout << name_ << " backward" << std::endl;
     return bottom_;
 }

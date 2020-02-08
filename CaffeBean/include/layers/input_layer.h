@@ -16,9 +16,9 @@ public:
 
     void init_layer();
 
-    Bean *forward(Bean *bottom);
+    Bean *forward(std::vector<Bean *> bottom);
 
-    Bean *backward(Bean *top);
+    Bean *backward(std::vector<Bean *> top);
 
     void random_init(std::vector<int> &shape);
 };

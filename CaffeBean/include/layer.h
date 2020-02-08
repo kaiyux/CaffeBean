@@ -28,9 +28,9 @@ public:
 
     virtual void init_layer() = 0;
 
-    virtual Bean *forward(Bean *bottom) = 0;
+    virtual Bean *forward(std::vector<Bean *> bottom) = 0;
 
-    virtual Bean *backward(Bean *top) = 0;
+    virtual Bean *backward(std::vector<Bean *> top) = 0;
 };
 
 #endif //CAFFEBEAN_LAYER_H
