@@ -6,6 +6,7 @@
 #include <iostream>
 #include "../CaffeBean/include/bean.h"
 #include "../CaffeBean/include/layers/fully_connected_layer.h"
+#include "../CaffeBean/include/layers/l1loss_layer.h"
 #include "../CaffeBean/include/math_function.h"
 
 using namespace std;
@@ -64,6 +65,15 @@ TEST(FullyConnectedLayer, layer_forward_test) {
                    fc->get_top()->shape_.back());
 }
 // -------------------- FullyConnectedLayer --------------------
+
+// -------------------- L1LossLayer --------------------
+TEST(L1LossLayer, layer_init_test) {
+    L1LossLayer *l1 = new L1LossLayer("l1");
+    ASSERT_EQ(l1->get_reduction(), "mean");
+    L1LossLayer *l2 = new L1LossLayer("l2", "sum");
+    ASSERT_EQ(l2->get_reduction(), "sum");
+}
+// -------------------- L1LossLayer --------------------
 
 // -------------------- Math_fuction --------------------
 TEST(Math_fuction, Eigen_test) {
