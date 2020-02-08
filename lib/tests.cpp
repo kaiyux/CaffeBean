@@ -51,18 +51,18 @@ TEST(FullyConnectedLayer, layer_forward_test) {
     fc->init_layer();
     fc->forward({input});
 
-    ASSERT_EQ(fc->get_top()->size_, 10);
-    display_matrix("fc->bottom", fc->get_bottom()->data_,
-                   fc->get_bottom()->size_ / fc->get_bottom()->shape_.back(),
-                   fc->get_bottom()->shape_.back());
+    ASSERT_EQ(fc->get_top()[0]->size_, 10);
+    display_matrix("fc->bottom", fc->get_bottom()[0]->data_,
+                   fc->get_bottom()[0]->size_ / fc->get_bottom()[0]->shape_.back(),
+                   fc->get_bottom()[0]->shape_.back());
     display_matrix("fc->weight", fc->get_weight()->data_,
                    fc->get_weight()->shape_[0], fc->get_weight()->shape_[1]);
     display_matrix("fc->bias", fc->get_bias()->data_,
-                   fc->get_top()->size_ / fc->get_top()->shape_.back(),
-                   fc->get_top()->shape_.back());
-    display_matrix("fc->top", fc->get_top()->data_,
-                   fc->get_top()->size_ / fc->get_top()->shape_.back(),
-                   fc->get_top()->shape_.back());
+                   fc->get_top()[0]->size_ / fc->get_top()[0]->shape_.back(),
+                   fc->get_top()[0]->shape_.back());
+    display_matrix("fc->top", fc->get_top()[0]->data_,
+                   fc->get_top()[0]->size_ / fc->get_top()[0]->shape_.back(),
+                   fc->get_top()[0]->shape_.back());
 }
 // -------------------- FullyConnectedLayer --------------------
 
@@ -78,6 +78,42 @@ TEST(L1LossLayer, layer_init_test) {
 // -------------------- Math_fuction --------------------
 TEST(Math_fuction, Eigen_test) {
     Eigen_test();
+}
+
+TEST(Math_fuction, matrix_add) {
+    const int size = 12;
+    auto *a = new float[size];
+    for (int i = 0; i < size; ++i) {
+        a[i] = i;
+    }
+    auto *b = new float[size];
+    for (int i = 0; i < size; ++i) {
+        b[i] = i;
+    }
+    auto *c = new float[size];
+    matrix_add(a, b, c, 3, 4);
+    display_matrix("a+b", c, 3, 4);
+    delete[]a;
+    delete[]b;
+    delete[]c;
+}
+
+TEST(Math_fuction, matrix_sub) {
+    const int size = 12;
+    auto *a = new float[size];
+    for (int i = 0; i < size; ++i) {
+        a[i] = i;
+    }
+    auto *b = new float[size];
+    for (int i = 0; i < size; ++i) {
+        b[i] = i;
+    }
+    auto *c = new float[size];
+    matrix_sub(a, b, c, 3, 4);
+    display_matrix("a-b", c, 3, 4);
+    delete[]a;
+    delete[]b;
+    delete[]c;
 }
 
 TEST(Math_fuction, matrix_multiply) {

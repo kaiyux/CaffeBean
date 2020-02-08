@@ -11,11 +11,11 @@ Layer::Layer(std::string name) {
 
 Layer::~Layer() {}
 
-Bean *Layer::get_top() {
+std::vector<Bean *> Layer::get_top() {
     return top_;
 }
 
-Bean *Layer::get_bottom() {
+std::vector<Bean *> Layer::get_bottom() {
     return bottom_;
 }
 

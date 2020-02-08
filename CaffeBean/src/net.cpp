@@ -32,11 +32,11 @@ void Net::init_net() {
     }
 }
 
-Bean *Net::forward() {
+std::vector<Bean *> Net::forward() {
     std::unique_ptr<InputLayer> input_layer(new InputLayer("input_layer"));
     std::vector<int> input_shape = {5, 10};
     input_layer->random_init(input_shape);
-    Bean *curBottom = input_layer->get_top();
+    std::vector<Bean *> curBottom = input_layer->get_top();
     for (auto &layer : layers_) {
         layer->forward({curBottom});
         curBottom = layer->get_top();
@@ -45,7 +45,7 @@ Bean *Net::forward() {
 }
 
 void Net::backward() {
-    Bean *curTop;
+    std::vector<Bean *> curTop;
     for (int i = layers_.size() - 1; i >= 0; --i) {
         curTop = layers_[i]->get_bottom();
         layers_[i]->backward({curTop});

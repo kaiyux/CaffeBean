@@ -19,9 +19,9 @@ public:
 
     void init_layer();
 
-    Bean *forward(std::vector<Bean *> bottom);
+    std::vector<Bean *> forward(std::vector<Bean *> bottom);
 
-    Bean *backward(std::vector<Bean *> top);
+    std::vector<Bean *> backward(std::vector<Bean *> top);
 
     std::string get_reduction();
 };

@@ -43,6 +43,13 @@ inline void matrix_add(float *a, float *b, float *c, int row, int col) {
     dym_mat_c = dym_mat_a + dym_mat_b;
 }
 
+inline void matrix_sub(float *a, float *b, float *c, int row, int col) {
+    auto dym_mat_a = Map<Matrix<float, Dynamic, Dynamic, RowMajor> >(a, row, col);
+    auto dym_mat_b = Map<Matrix<float, Dynamic, Dynamic, RowMajor> >(b, row, col);
+    auto dym_mat_c = Map<Matrix<float, Dynamic, Dynamic, RowMajor> >(c, row, col);
+    dym_mat_c = dym_mat_a - dym_mat_b;
+}
+
 inline void matrix_multiply(float *a, float *b, float *c, int a_row, int a_col, int b_row, int b_col) {
     CAFFEBEAN_ASSERT(a_col == b_row, "a_col should be equal to b_row");
     auto dym_mat_a = Map<Matrix<float, Dynamic, Dynamic, RowMajor> >(a, a_row, a_col);

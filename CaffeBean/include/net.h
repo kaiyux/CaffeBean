@@ -18,7 +18,7 @@ public:
 
     void init_net();
 
-    Bean *forward();
+    std::vector<Bean *> forward();
 
     void backward();
 

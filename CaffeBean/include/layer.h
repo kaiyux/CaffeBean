@@ -12,25 +12,25 @@
 
 class Layer {
 protected:
-    Bean *top_;
-    Bean *bottom_;
+    std::vector<Bean *> top_;
+    std::vector<Bean *> bottom_;
     std::string name_;
 public:
     Layer(std::string name);
 
     virtual ~Layer();
 
-    Bean *get_top();
+    std::vector<Bean *> get_top();
 
-    Bean *get_bottom();
+    std::vector<Bean *> get_bottom();
 
     std::string get_name();
 
     virtual void init_layer() = 0;
 
-    virtual Bean *forward(std::vector<Bean *> bottom) = 0;
+    virtual std::vector<Bean *> forward(std::vector<Bean *> bottom) = 0;
 
-    virtual Bean *backward(std::vector<Bean *> top) = 0;
+    virtual std::vector<Bean *> backward(std::vector<Bean *> top) = 0;
 };
 
 #endif //CAFFEBEAN_LAYER_H
