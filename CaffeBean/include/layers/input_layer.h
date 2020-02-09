@@ -16,11 +16,11 @@ public:
 
     void init_layer();
 
-    std::vector<Bean *> forward(std::vector<Bean *> bottom);
+    std::vector<Bean *> forward(std::vector<Bean *> &bottom);
 
-    std::vector<Bean *> backward(std::vector<Bean *> top);
+    std::vector<Bean *> backward(std::vector<Bean *> &top);
 
-    void random_init(std::vector<int> &shape);
+    std::vector<Bean *> random_init(std::vector<int> &shape);
 };
 
 #endif //CAFFEBEAN_INPUT_LAYER_H

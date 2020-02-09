@@ -41,28 +41,30 @@ TEST(FullyConnectedLayer, layer_init_test) {
 }
 
 TEST(FullyConnectedLayer, layer_forward_test) {
-    Bean *input = new Bean({2, 3});
-    normal(input);
+    Bean *input_bean = new Bean({2, 3});
+    normal(input_bean);
+    vector<Bean *> input, output;
+    input.push_back(input_bean);
 
     int in_features = 3, out_features = 5;
     bool has_bias = true;
     FullyConnectedLayer *fc = new FullyConnectedLayer("test_fc", in_features, out_features, has_bias);
 
     fc->init_layer();
-    fc->forward({input});
+    output = fc->forward(input);
 
-    ASSERT_EQ(fc->get_top()[0]->size_, 10);
-    display_matrix("fc->bottom", fc->get_bottom()[0]->data_,
-                   fc->get_bottom()[0]->size_ / fc->get_bottom()[0]->shape_.back(),
-                   fc->get_bottom()[0]->shape_.back());
+    ASSERT_EQ(output[0]->size_, 10);
+    display_matrix("fc->bottom", input[0]->data_,
+                   input[0]->size_ / input[0]->shape_.back(),
+                   input[0]->shape_.back());
     display_matrix("fc->weight", fc->get_weight()->data_,
                    fc->get_weight()->shape_[0], fc->get_weight()->shape_[1]);
     display_matrix("fc->bias", fc->get_bias()->data_,
-                   fc->get_top()[0]->size_ / fc->get_top()[0]->shape_.back(),
-                   fc->get_top()[0]->shape_.back());
-    display_matrix("fc->top", fc->get_top()[0]->data_,
-                   fc->get_top()[0]->size_ / fc->get_top()[0]->shape_.back(),
-                   fc->get_top()[0]->shape_.back());
+                   output[0]->size_ / output[0]->shape_.back(),
+                   output[0]->shape_.back());
+    display_matrix("fc->top", output[0]->data_,
+                   output[0]->size_ / output[0]->shape_.back(),
+                   output[0]->shape_.back());
 }
 // -------------------- FullyConnectedLayer --------------------
 

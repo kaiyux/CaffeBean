@@ -19,9 +19,9 @@ public:
 
     void init_layer();
 
-    std::vector<Bean *> forward(std::vector<Bean *> bottom);
+    std::vector<Bean *> forward(std::vector<Bean *> &bottom);
 
-    std::vector<Bean *> backward(std::vector<Bean *> top);
+    std::vector<Bean *> backward(std::vector<Bean *> &top);
 
     Bean *get_weight();
 

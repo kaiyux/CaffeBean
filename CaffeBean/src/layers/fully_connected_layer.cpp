@@ -33,31 +33,32 @@ void FullyConnectedLayer::init_layer() {
     }
 }
 
-std::vector<Bean *> FullyConnectedLayer::forward(std::vector<Bean *> bottom) {
+std::vector<Bean *> FullyConnectedLayer::forward(std::vector<Bean *> &bottom) {
     CAFFEBEAN_LOG(name_ << " forward");
-    bottom_ = bottom;
-    CAFFEBEAN_ASSERT(bottom_[0]->shape_.back() == in_features_,
-                     bottom_[0]->shape_.back() << " != " << in_features_);
+    CAFFEBEAN_ASSERT(bottom[0]->shape_.back() == in_features_,
+                     bottom[0]->shape_.back() << " != " << in_features_);
 
     // get the shape of top
-    std::vector<int> top_shape = bottom_[0]->shape_;
+    std::vector<int> top_shape = bottom[0]->shape_;
     top_shape.pop_back();
     top_shape.push_back(out_features_);
-    top_.push_back(new Bean(top_shape));
+    std::vector<Bean *> top;
+    top.push_back(new Bean(top_shape));
 
-    const int bottom_n = bottom_[0]->size_ / bottom_[0]->shape_.back();
-    matrix_multiply(bottom_[0]->data_, weight_->data_, top_[0]->data_,
+    const int bottom_n = bottom[0]->size_ / bottom[0]->shape_.back();
+    matrix_multiply(bottom[0]->data_, weight_->data_, top[0]->data_,
                     bottom_n, in_features_, weight_->shape_[0], out_features_);
     if (has_bias_) {
-        const int top_n = top_[0]->size_ / top_[0]->shape_.back();
-        matrix_add(top_[0]->data_, bias_->data_, top_[0]->data_, top_n, out_features_);
+        const int top_n = top[0]->size_ / top[0]->shape_.back();
+        matrix_add(top[0]->data_, bias_->data_, top[0]->data_, top_n, out_features_);
     }
-    return top_;
+    return top;
 }
 
-std::vector<Bean *> FullyConnectedLayer::backward(std::vector<Bean *> top) {
+std::vector<Bean *> FullyConnectedLayer::backward(std::vector<Bean *> &top) {
     CAFFEBEAN_LOG(name_ << " backward");
-    return bottom_;
+    std::vector<Bean *> bottom;
+    return bottom;
 }
 
 Bean *FullyConnectedLayer::get_weight() {

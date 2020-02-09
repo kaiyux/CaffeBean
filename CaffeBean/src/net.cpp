@@ -35,20 +35,20 @@ void Net::init_net() {
 std::vector<Bean *> Net::forward() {
     std::unique_ptr<InputLayer> input_layer(new InputLayer("input_layer"));
     std::vector<int> input_shape = {5, 10};
-    input_layer->random_init(input_shape);
-    std::vector<Bean *> curBottom = input_layer->get_top();
+    std::vector<Bean *> cur_bottom = input_layer->random_init(input_shape);
+    std::vector<Bean *> cur_top;
     for (auto &layer : layers_) {
-        layer->forward({curBottom});
-        curBottom = layer->get_top();
+        cur_top = layer->forward(cur_bottom);
+        cur_bottom = cur_top;
     }
-    return curBottom;
+    return cur_bottom;
 }
 
 void Net::backward() {
-    std::vector<Bean *> curTop;
+    std::vector<Bean *> cur_bottom, cur_top;
     for (int i = layers_.size() - 1; i >= 0; --i) {
-        curTop = layers_[i]->get_bottom();
-        layers_[i]->backward({curTop});
+        cur_bottom = layers_[i]->backward(cur_top);
+        cur_top = cur_bottom;
     }
 }
 

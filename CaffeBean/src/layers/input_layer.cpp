@@ -14,18 +14,22 @@ InputLayer::~InputLayer() {
 
 void InputLayer::init_layer() {}
 
-std::vector<Bean *> InputLayer::forward(std::vector<Bean *> bottom) {
+std::vector<Bean *> InputLayer::forward(std::vector<Bean *> &bottom) {
     CAFFEBEAN_LOG(name_ << " forward");
-    return top_;
+    std::vector<Bean *> top;
+    return top;
 }
 
-std::vector<Bean *> InputLayer::backward(std::vector<Bean *> top) {
+std::vector<Bean *> InputLayer::backward(std::vector<Bean *> &top) {
     CAFFEBEAN_LOG(name_ << " backward");
-    return bottom_;
+    std::vector<Bean *> bottom;
+    return bottom;
 }
 
-void InputLayer::random_init(std::vector<int> &shape) {
-    Bean *top = new Bean(shape);
-    normal(top);
-    top_.push_back(top);
+std::vector<Bean *> InputLayer::random_init(std::vector<int> &shape) {
+    std::vector<Bean *> top;
+    Bean *top_bean = new Bean(shape);
+    normal(top_bean);
+    top.push_back(top_bean);
+    return top;
 }
