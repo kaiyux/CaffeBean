@@ -9,11 +9,11 @@
 
 class L1LossLayer : public Layer {
 private:
-    std::string reduction_;
+    int reduction_;
 public:
     L1LossLayer(const std::string &name);
 
-    L1LossLayer(const std::string &name, std::string reduction);
+    L1LossLayer(const std::string &name, int reduction);
 
     ~L1LossLayer();
 
@@ -23,7 +23,11 @@ public:
 
     std::vector<Bean *> backward(std::vector<Bean *> top);
 
-    std::string get_reduction();
+    int get_reduction();
+
+    static const int NONE = 0;
+    static const int MEAN = 1;
+    static const int SUM = 2;
 };
 
 #endif //CAFFEBEAN_L1LOSS_LAYER_H

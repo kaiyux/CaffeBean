@@ -5,11 +5,11 @@
 #include "../../include/layers/l1loss_layer.h"
 
 L1LossLayer::L1LossLayer(const std::string &name) : Layer(name) {
-    reduction_ = "mean";
+    reduction_ = MEAN;
 }
 
-L1LossLayer::L1LossLayer(const std::string &name, std::string reduction) : Layer(name) {
-    CAFFEBEAN_ASSERT(reduction == "none" || reduction == "mean" || reduction == "sum",
+L1LossLayer::L1LossLayer(const std::string &name, int reduction) : Layer(name) {
+    CAFFEBEAN_ASSERT(reduction == NONE || reduction == MEAN || reduction == SUM,
                      "reduction should be one of: none, mean, sum");
     reduction_ = reduction;
 }
@@ -33,7 +33,7 @@ std::vector<Bean *> L1LossLayer::backward(std::vector<Bean *> top) {
     CAFFEBEAN_LOG(name_ << " backward");
 }
 
-std::string L1LossLayer::get_reduction() {
+int L1LossLayer::get_reduction() {
     return reduction_;
 }
 

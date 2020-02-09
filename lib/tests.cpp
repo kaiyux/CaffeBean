@@ -69,9 +69,11 @@ TEST(FullyConnectedLayer, layer_forward_test) {
 // -------------------- L1LossLayer --------------------
 TEST(L1LossLayer, layer_init_test) {
     L1LossLayer *l1 = new L1LossLayer("l1");
-    ASSERT_EQ(l1->get_reduction(), "mean");
-    L1LossLayer *l2 = new L1LossLayer("l2", "sum");
-    ASSERT_EQ(l2->get_reduction(), "sum");
+    int mean = L1LossLayer::MEAN;
+    ASSERT_EQ(l1->get_reduction(), mean);
+    L1LossLayer *l2 = new L1LossLayer("l2", L1LossLayer::SUM);
+    int sum = L1LossLayer::SUM;
+    ASSERT_EQ(l2->get_reduction(), sum);
 }
 // -------------------- L1LossLayer --------------------
 
