@@ -26,8 +26,18 @@ std::vector<Bean *> L1LossLayer::forward(std::vector<Bean *> &bottom) {
                      "The 2 input shape of l1losslayer should be equal.");
     CAFFEBEAN_ASSERT(bottom[0]->shape_.size() >= 2,
                      "The input shape of l1losslayer should be (N,*).");
-    std::vector<Bean *> top;
-    return top;
+    Bean *top_bean = new Bean(bottom[0]->shape_);
+    const int N = bottom[0]->shape_[0];
+    if (reduction_ == NONE) {
+        matrix_sub(bottom[0]->data_, bottom[1]->data_, top_bean->data_, N, bottom[0]->size_ / N);
+        matrix_abs(top_bean->data_, top_bean->data_, N, bottom[0]->size_ / N);
+    } else if (reduction_ == MEAN) {
+        matrix_add(bottom[0]->data_, bottom[1]->data_, top_bean->data_, N, bottom[0]->size_ / N);
+        matrix_divide_constant(top_bean->data_, top_bean->data_, 2, N, bottom[0]->size_ / N);
+    } else {
+        matrix_add(bottom[0]->data_, bottom[1]->data_, top_bean->data_, N, bottom[0]->size_ / N);
+    }
+    return {top_bean};
 }
 
 std::vector<Bean *> L1LossLayer::backward(std::vector<Bean *> &top) {

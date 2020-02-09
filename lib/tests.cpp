@@ -70,12 +70,38 @@ TEST(FullyConnectedLayer, layer_forward_test) {
 
 // -------------------- L1LossLayer --------------------
 TEST(L1LossLayer, layer_init_test) {
-    L1LossLayer *l1 = new L1LossLayer("l1");
+    L1LossLayer *l1 = new L1LossLayer("l1", L1LossLayer::NONE);
+    int none = L1LossLayer::NONE;
+    ASSERT_EQ(l1->get_reduction(), none);
+
+    L1LossLayer *l2 = new L1LossLayer("l2");
     int mean = L1LossLayer::MEAN;
-    ASSERT_EQ(l1->get_reduction(), mean);
-    L1LossLayer *l2 = new L1LossLayer("l2", L1LossLayer::SUM);
+    ASSERT_EQ(l2->get_reduction(), mean);
+
+    L1LossLayer *l3 = new L1LossLayer("l3", L1LossLayer::SUM);
     int sum = L1LossLayer::SUM;
-    ASSERT_EQ(l2->get_reduction(), sum);
+    ASSERT_EQ(l3->get_reduction(), sum);
+}
+
+TEST(L1LossLayer, layer_forward_test) {
+    Bean *input_bean = new Bean({3, 4});
+    Bean *label = new Bean({3, 4});
+    std::vector<Bean *> input = {input_bean, label};
+    for (auto i:input) {
+        normal(i);
+    }
+
+    L1LossLayer *l1 = new L1LossLayer("l1", L1LossLayer::NONE);
+    std::vector<Bean *> output1 = l1->forward(input);
+    display_matrix("none l1losslayer output", output1[0]->data_, 3, 4);
+
+    L1LossLayer *l2 = new L1LossLayer("l2");
+    std::vector<Bean *> output2 = l2->forward(input);
+    display_matrix("mean l1losslayer output", output2[0]->data_, 3, 4);
+
+    L1LossLayer *l3 = new L1LossLayer("l3", L1LossLayer::SUM);
+    std::vector<Bean *> output3 = l3->forward(input);
+    display_matrix("sum l1losslayer output", output3[0]->data_, 3, 4);
 }
 // -------------------- L1LossLayer --------------------
 
@@ -134,6 +160,36 @@ TEST(Math_fuction, matrix_multiply) {
     delete[]a;
     delete[]b;
     delete[]c;
+}
+
+TEST(Math_fuction, matrix_abs) {
+    auto *a = new float[20];
+    for (int i = 0; i < 20; ++i) {
+        a[i] = -i;
+    }
+    matrix_abs(a, a, 4, 5);
+    display_matrix("abs", a, 4, 5);
+    delete[]a;
+}
+
+TEST(Math_fuction, matrix_plus_constant) {
+    auto *a = new float[20];
+    for (int i = 0; i < 20; ++i) {
+        a[i] = i;
+    }
+    matrix_plus_constant(a, a, 10, 4, 5);
+    display_matrix("abs", a, 4, 5);
+    delete[]a;
+}
+
+TEST(Math_fuction, matrix_divide_constant) {
+    auto *a = new float[20];
+    for (int i = 0; i < 20; ++i) {
+        a[i] = i;
+    }
+    matrix_divide_constant(a, a, 5, 4, 5);
+    display_matrix("abs", a, 4, 5);
+    delete[]a;
 }
 // -------------------- Math_fuction --------------------
 

@@ -58,4 +58,22 @@ inline void matrix_multiply(float *a, float *b, float *c, int a_row, int a_col, 
     dym_mat_c = dym_mat_a * dym_mat_b;
 }
 
+inline void matrix_abs(float *a, float *b, int a_row, int a_col) {
+    auto dym_mat_a = Map<Matrix<float, Dynamic, Dynamic, RowMajor> >(a, a_row, a_col);
+    auto dym_mat_b = Map<Matrix<float, Dynamic, Dynamic, RowMajor> >(b, a_row, a_col);
+    dym_mat_b = dym_mat_a.array().abs();
+}
+
+inline void matrix_plus_constant(float *a, float *b, float val, int a_row, int a_col) {
+    auto dym_mat_a = Map<Matrix<float, Dynamic, Dynamic, RowMajor> >(a, a_row, a_col);
+    auto dym_mat_b = Map<Matrix<float, Dynamic, Dynamic, RowMajor> >(b, a_row, a_col);
+    dym_mat_b = dym_mat_a.array() + val;
+}
+
+inline void matrix_divide_constant(float *a, float *b, float val, int a_row, int a_col) {
+    auto dym_mat_a = Map<Matrix<float, Dynamic, Dynamic, RowMajor> >(a, a_row, a_col);
+    auto dym_mat_b = Map<Matrix<float, Dynamic, Dynamic, RowMajor> >(b, a_row, a_col);
+    dym_mat_b = dym_mat_a.array() / val;
+}
+
 #endif //CAFFEBEAN_MATH_FUNCTION_H
