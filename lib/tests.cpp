@@ -107,6 +107,34 @@ TEST(L1LossLayer, layer_forward_test) {
 
     ASSERT_EQ(output3[0]->data_[0] / (3 * 4), output2[0]->data_[0]);
 }
+
+TEST(L1LossLayer, layer_backward_test) {
+    Bean *input_bean = new Bean({3, 4});
+    Bean *label = new Bean({3, 4});
+    std::vector<Bean *> input = {input_bean, label};
+    for (int i = 0; i < 12; ++i) {
+        input[0]->data_[i] = i;
+    }
+    constant(input[1], 5);
+
+    L1LossLayer *l1 = new L1LossLayer("l1", L1LossLayer::NONE);
+    auto loss1 = l1->forward(input);
+    display_matrix("none l1losslayer loss", loss1[0]->data_, 3, 4);
+    auto diff1 = l1->backward(loss1);
+    display_matrix("none l1losslayer diff", diff1[0]->diff_, 3, 4);
+
+    L1LossLayer *l2 = new L1LossLayer("l2");
+    auto loss2 = l2->forward(input);
+    display_matrix("mean l2losslayer loss", loss2[0]->data_, 1, 1);
+    auto diff2 = l2->backward(loss2);
+    display_matrix("mean l2losslayer diff", diff2[0]->diff_, 1, 1);
+
+    L1LossLayer *l3 = new L1LossLayer("l3", L1LossLayer::SUM);
+    auto loss3 = l3->forward(input);
+    display_matrix("mean l2losslayer loss", loss3[0]->data_, 1, 1);
+    auto diff3 = l2->backward(loss3);
+    display_matrix("mean l3losslayer diff", diff3[0]->diff_, 1, 1);
+}
 // -------------------- L1LossLayer --------------------
 
 // -------------------- Math_fuction --------------------
@@ -182,6 +210,16 @@ TEST(Math_fuction, matrix_plus_constant) {
         a[i] = i;
     }
     matrix_plus_constant(a, a, 10, 4, 5);
+    display_matrix("abs", a, 4, 5);
+    delete[]a;
+}
+
+TEST(Math_fuction, matrix_multiply_constant) {
+    auto *a = new float[20];
+    for (int i = 0; i < 20; ++i) {
+        a[i] = i;
+    }
+    matrix_multiply_constant(a, a, 10, 4, 5);
     display_matrix("abs", a, 4, 5);
     delete[]a;
 }

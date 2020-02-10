@@ -10,6 +10,7 @@
 class L1LossLayer : public Layer {
 private:
     int reduction_;
+    Bean *diff_;
 public:
     L1LossLayer(const std::string &name);
 
