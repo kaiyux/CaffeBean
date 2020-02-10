@@ -76,4 +76,10 @@ inline void matrix_divide_constant(float *a, float *b, float val, int a_row, int
     dym_mat_b = dym_mat_a.array() / val;
 }
 
+inline float matrix_sum(float *a, int a_row, int a_col) {
+    auto dym_mat_a = Map<Matrix<float, Dynamic, Dynamic, RowMajor> >(a, a_row, a_col);
+    float sum = dym_mat_a.sum();
+    return sum;
+}
+
 #endif //CAFFEBEAN_MATH_FUNCTION_H

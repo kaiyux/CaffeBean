@@ -97,11 +97,15 @@ TEST(L1LossLayer, layer_forward_test) {
 
     L1LossLayer *l2 = new L1LossLayer("l2");
     std::vector<Bean *> output2 = l2->forward(input);
-    display_matrix("mean l1losslayer output", output2[0]->data_, 3, 4);
+    ASSERT_EQ(output2[0]->size_, 1);
+    display_matrix("mean l1losslayer output", output2[0]->data_, 1, 1);
 
     L1LossLayer *l3 = new L1LossLayer("l3", L1LossLayer::SUM);
     std::vector<Bean *> output3 = l3->forward(input);
-    display_matrix("sum l1losslayer output", output3[0]->data_, 3, 4);
+    ASSERT_EQ(output2[0]->size_, 1);
+    display_matrix("sum l1losslayer output", output3[0]->data_, 1, 1);
+
+    ASSERT_EQ(output3[0]->data_[0] / (3 * 4), output2[0]->data_[0]);
 }
 // -------------------- L1LossLayer --------------------
 
@@ -189,6 +193,17 @@ TEST(Math_fuction, matrix_divide_constant) {
     }
     matrix_divide_constant(a, a, 5, 4, 5);
     display_matrix("abs", a, 4, 5);
+    delete[]a;
+}
+
+TEST(Math_fuction, matrix_sum) {
+    auto *a = new float[20];
+    float sum = 0;
+    for (int i = 0; i < 20; ++i) {
+        a[i] = i;
+        sum += i;
+    }
+    ASSERT_EQ(matrix_sum(a, 4, 5), sum);
     delete[]a;
 }
 // -------------------- Math_fuction --------------------

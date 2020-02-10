@@ -27,15 +27,21 @@ std::vector<Bean *> L1LossLayer::forward(std::vector<Bean *> &bottom) {
     CAFFEBEAN_ASSERT(bottom[0]->shape_.size() >= 2,
                      "The input shape of l1losslayer should be (N,*).");
     Bean *top_bean = new Bean(bottom[0]->shape_);
+    const int size = bottom[0]->size_;
     const int N = bottom[0]->shape_[0];
-    if (reduction_ == NONE) {
-        matrix_sub(bottom[0]->data_, bottom[1]->data_, top_bean->data_, N, bottom[0]->size_ / N);
-        matrix_abs(top_bean->data_, top_bean->data_, N, bottom[0]->size_ / N);
-    } else if (reduction_ == MEAN) {
-        matrix_add(bottom[0]->data_, bottom[1]->data_, top_bean->data_, N, bottom[0]->size_ / N);
-        matrix_divide_constant(top_bean->data_, top_bean->data_, 2, N, bottom[0]->size_ / N);
-    } else {
-        matrix_add(bottom[0]->data_, bottom[1]->data_, top_bean->data_, N, bottom[0]->size_ / N);
+
+    matrix_sub(bottom[0]->data_, bottom[1]->data_, top_bean->data_, N, size / N);
+    matrix_abs(top_bean->data_, top_bean->data_, N, size / N);
+
+    // if reduction = SUM or MEAN, the result will be a scalar
+    if (reduction_ == SUM || reduction_ == MEAN) {
+        float res = matrix_sum(top_bean->data_, N, size / N);
+        if (reduction_ == MEAN) {
+            res /= (float) size;
+        }
+        delete top_bean;
+        top_bean = new Bean({1});
+        top_bean->data_[0] = res;
     }
     return {top_bean};
 }
