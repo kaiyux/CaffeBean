@@ -122,6 +122,7 @@ TEST(L1LossLayer, layer_backward_test) {
     display_matrix("none l1losslayer loss", loss1[0]->data_, 3, 4);
     auto diff1 = l1->backward(loss1);
     display_matrix("none l1losslayer diff", diff1[0]->diff_, 3, 4);
+    display_matrix("none l1losslayer diff", diff1[1]->diff_, 3, 4);
 
     L1LossLayer *l2 = new L1LossLayer("l2");
     auto loss2 = l2->forward(input);
@@ -131,9 +132,9 @@ TEST(L1LossLayer, layer_backward_test) {
 
     L1LossLayer *l3 = new L1LossLayer("l3", L1LossLayer::SUM);
     auto loss3 = l3->forward(input);
-    display_matrix("mean l2losslayer loss", loss3[0]->data_, 1, 1);
-    auto diff3 = l2->backward(loss3);
-    display_matrix("mean l3losslayer diff", diff3[0]->diff_, 1, 1);
+    display_matrix("sum l3losslayer loss", loss3[0]->data_, 1, 1);
+    auto diff3 = l3->backward(loss3);
+    display_matrix("sum l3losslayer diff", diff3[0]->diff_, 1, 1);
 }
 // -------------------- L1LossLayer --------------------
 
