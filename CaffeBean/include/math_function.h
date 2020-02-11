@@ -88,4 +88,10 @@ inline float matrix_sum(float *a, int a_row, int a_col) {
     return sum;
 }
 
+inline void matrix_transpose(float *a, float *b, int a_row, int a_col) {
+    auto dym_mat_a = Map<Matrix<float, Dynamic, Dynamic, RowMajor> >(a, a_row, a_col);
+    auto dym_mat_b = Map<Matrix<float, Dynamic, Dynamic, RowMajor> >(b, a_col, a_row);
+    dym_mat_b = dym_mat_a.transpose();
+}
+
 #endif //CAFFEBEAN_MATH_FUNCTION_H

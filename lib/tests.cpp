@@ -40,31 +40,48 @@ TEST(FullyConnectedLayer, layer_init_test) {
     delete fc;
 }
 
-TEST(FullyConnectedLayer, layer_forward_test) {
+TEST(FullyConnectedLayer, layer_forward_backward_test) {
     Bean *input_bean = new Bean({2, 3});
     normal(input_bean);
     vector<Bean *> input, output;
     input.push_back(input_bean);
 
-    int in_features = 3, out_features = 5;
-    bool has_bias = true;
+    const int in_features = 3, out_features = 4;
+    const bool has_bias = true;
     FullyConnectedLayer *fc = new FullyConnectedLayer("test_fc", in_features, out_features, has_bias);
-
     fc->init_layer();
+
+    // forward
     output = fc->forward(input);
 
-    ASSERT_EQ(output[0]->size_, 10);
+    ASSERT_EQ(output[0]->size_, 8);
     display_matrix("fc->bottom", input[0]->data_,
                    input[0]->size_ / input[0]->shape_.back(),
                    input[0]->shape_.back());
     display_matrix("fc->weight", fc->get_weight()->data_,
-                   fc->get_weight()->shape_[0], fc->get_weight()->shape_[1]);
+                   in_features, out_features);
     display_matrix("fc->bias", fc->get_bias()->data_,
-                   output[0]->size_ / output[0]->shape_.back(),
-                   output[0]->shape_.back());
+                   1, out_features);
     display_matrix("fc->top", output[0]->data_,
                    output[0]->size_ / output[0]->shape_.back(),
                    output[0]->shape_.back());
+
+    // backward
+    Bean *top_bean = new Bean({2, 4});
+    for (int i = 0; i < 8; ++i) {
+        top_bean->diff_[i] = i - 4;
+    }
+    vector<Bean *> top = {top_bean};
+
+    auto bottom = fc->backward(top);
+
+    ASSERT_EQ(bottom[0]->shape_, input[0]->shape_);
+    display_matrix("fc->top diff", top[0]->diff_, 2, 4);
+    display_matrix("fc->weight diff", fc->get_weight()->diff_,
+                   in_features, out_features);
+    display_matrix("fc->bias diff", fc->get_bias()->diff_,
+                   1, out_features);
+    display_matrix("fc->bottom diff", bottom[0]->diff_, 2, 3);
 }
 // -------------------- FullyConnectedLayer --------------------
 
@@ -243,6 +260,17 @@ TEST(Math_fuction, matrix_sum) {
         sum += i;
     }
     ASSERT_EQ(matrix_sum(a, 4, 5), sum);
+    delete[]a;
+}
+
+TEST(Math_fuction, matrix_transpose) {
+    auto *a = new float[20];
+    auto *b = new float[20]();
+    for (int i = 0; i < 20; ++i) {
+        a[i] = i;
+    }
+    matrix_transpose(a, b, 5, 4);
+    display_matrix("transpose", b, 4, 5);
     delete[]a;
 }
 // -------------------- Math_fuction --------------------
