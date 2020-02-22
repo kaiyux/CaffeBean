@@ -11,6 +11,13 @@
 class Net {
 private:
     std::vector<std::unique_ptr<Layer>> layers_;
+
+    std::vector<std::shared_ptr<Bean>> beans_;
+    std::vector<std::shared_ptr<Bean>> learnable_beans_;
+
+    std::vector<std::vector<std::shared_ptr<Bean>>> bottoms_;
+    std::vector<std::vector<std::shared_ptr<Bean>>> tops_;
+
 public:
     Net();
 
@@ -18,7 +25,7 @@ public:
 
     void init_net();
 
-    std::vector<Bean *> forward();
+    void forward();
 
     void backward();
 

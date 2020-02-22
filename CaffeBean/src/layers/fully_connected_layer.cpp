@@ -11,40 +11,34 @@ FullyConnectedLayer::FullyConnectedLayer(const std::string &name, int in_feature
     out_features_ = out_features;
     has_bias_ = has_bias;
     std::vector<int> weight_shape = {in_features_, out_features_};
-    weight_ = new Bean(weight_shape);
+    weight_ = std::make_shared<Bean>(weight_shape);
     if (has_bias_) {
         std::vector<int> bias_shape = {out_features_};
-        bias_ = new Bean(bias_shape);
+        bias_ = std::make_shared<Bean>(bias_shape);
     }
 }
 
 FullyConnectedLayer::~FullyConnectedLayer() {
     CAFFEBEAN_LOG("layer " << name_ << " deleted");
-    delete weight_;
-    if (has_bias_) {
-        delete bias_;
-    }
 }
 
 void FullyConnectedLayer::init_layer() {
     CAFFEBEAN_LOG("initializing FullyConnectedLayer: " << name_ << " ...");
-    normal(weight_);
+    normal(weight_.get());
     if (has_bias_) {
-        zeros(bias_);
+        zeros(bias_.get());
     }
 }
 
-std::vector<Bean *> FullyConnectedLayer::forward(std::vector<Bean *> &bottom) {
+void FullyConnectedLayer::forward(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) {
     CAFFEBEAN_LOG(name_ << " forward");
     CAFFEBEAN_ASSERT(bottom[0]->shape_.back() == in_features_,
                      bottom[0]->shape_.back() << " != " << in_features_);
-    bottom_ = bottom;
+
     // top shape (N,*,out_features_)
     std::vector<int> top_shape = bottom[0]->shape_;
     top_shape.pop_back();
     top_shape.push_back(out_features_);
-    std::vector<Bean *> top;
-    top.push_back(new Bean(top_shape));
 
     // Regard bottom shape (N,*,in_features_) as (bottom_n,in_features_)
     const int bottom_n = bottom[0]->size_ / bottom[0]->shape_.back();
@@ -52,8 +46,9 @@ std::vector<Bean *> FullyConnectedLayer::forward(std::vector<Bean *> &bottom) {
     matrix_multiply(bottom[0]->data_, weight_->data_, top[0]->data_,
                     bottom_n, in_features_, weight_->shape_[0], out_features_);
     if (has_bias_) {
-        bias_multiplier_ = new Bean({bottom_n});
-        ones(bias_multiplier_);
+        std::vector<int> bias_multiplier_shape = {bottom_n};
+        bias_multiplier_ = std::make_shared<Bean>(bias_multiplier_shape);
+        ones(bias_multiplier_.get());
 
         // tmp_b = bias_multiplier_ * bias
         auto *tmp_b = new float[bottom_n * bias_->size_]();
@@ -62,10 +57,10 @@ std::vector<Bean *> FullyConnectedLayer::forward(std::vector<Bean *> &bottom) {
         const int top_n = top[0]->size_ / top[0]->shape_.back();
         matrix_add(top[0]->data_, tmp_b, top[0]->data_, top_n, out_features_);
     }
-    return top;
 }
 
-std::vector<Bean *> FullyConnectedLayer::backward(std::vector<Bean *> &top) {
+void FullyConnectedLayer::backward(std::vector<std::shared_ptr<Bean>> &bottom,
+                                   std::vector<std::shared_ptr<Bean>> &top) {
     CAFFEBEAN_LOG(name_ << " backward");
     CAFFEBEAN_ASSERT(top[0]->shape_.back() == out_features_,
                      top[0]->shape_.back() << "!=" << out_features_);
@@ -76,31 +71,33 @@ std::vector<Bean *> FullyConnectedLayer::backward(std::vector<Bean *> &top) {
     // dx = dy * w.T
     auto weight_transpose = new float[weight_->size_]();
     matrix_transpose(weight_->data_, weight_transpose, weight_->shape_[0], weight_->shape_[1]);
-    matrix_multiply(top[0]->diff_, weight_transpose, bottom_[0]->diff_,
+    matrix_multiply(top[0]->diff_, weight_transpose, bottom[0]->diff_,
                     top_n, out_features_, weight_->shape_[1], weight_->shape_[0]);
 
     // dw = x.T * dy
-    auto x_transpose = new float[bottom_[0]->size_]();
-    matrix_transpose(bottom_[0]->data_, x_transpose, bottom_[0]->size_ / in_features_, in_features_);
+    auto x_transpose = new float[bottom[0]->size_]();
+    matrix_transpose(bottom[0]->data_, x_transpose, bottom[0]->size_ / in_features_, in_features_);
     matrix_multiply(x_transpose, top[0]->diff_, weight_->diff_,
-                    in_features_, bottom_[0]->size_ / in_features_, top_n, out_features_);
+                    in_features_, bottom[0]->size_ / in_features_, top_n, out_features_);
 
     // db = bias_multiplier_.T * dy
     auto bm_transpose = new float[bias_->size_]();
     matrix_transpose(bias_multiplier_->data_, bm_transpose, bias_multiplier_->size_, 1);
     matrix_multiply(bm_transpose, top[0]->diff_, bias_->diff_,
-                    1, bottom_[0]->size_ / bottom_[0]->shape_.back(),
-                    bottom_[0]->size_ / bottom_[0]->shape_.back(), out_features_);
-
-    return bottom_;
+                    1, bottom[0]->size_ / bottom[0]->shape_.back(),
+                    bottom[0]->size_ / bottom[0]->shape_.back(), out_features_);
 }
 
 Bean *FullyConnectedLayer::get_weight() {
-    return weight_;
+    return weight_.get();
 }
 
 Bean *FullyConnectedLayer::get_bias() {
-    return bias_;
+    return bias_.get();
+}
+
+std::vector<std::shared_ptr<Bean>> FullyConnectedLayer::get_learnable_beans() {
+    return {weight_, bias_};
 }
 
 

@@ -20,9 +20,11 @@ public:
 
     void init_layer();
 
-    std::vector<Bean *> forward(std::vector<Bean *> &bottom);
+    void forward(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top);
 
-    std::vector<Bean *> backward(std::vector<Bean *> &top);
+    void backward(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top);
+
+    std::vector<std::shared_ptr<Bean>> get_learnable_beans();
 
     int get_reduction();
 

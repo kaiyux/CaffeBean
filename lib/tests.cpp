@@ -41,10 +41,14 @@ TEST(FullyConnectedLayer, layer_init_test) {
 }
 
 TEST(FullyConnectedLayer, layer_forward_backward_test) {
-    Bean *input_bean = new Bean({2, 3});
-    normal(input_bean);
-    vector<Bean *> input, output;
+    std::vector<int> input_shape = {2, 3};
+    std::shared_ptr<Bean> input_bean = std::make_shared<Bean>(input_shape);
+    normal(input_bean.get());
+    std::vector<int> output_shape = {2, 4};
+    std::shared_ptr<Bean> output_bean = std::make_shared<Bean>(output_shape);
+    vector<std::shared_ptr<Bean>> input, output;
     input.push_back(input_bean);
+    output.push_back(output_bean);
 
     const int in_features = 3, out_features = 4;
     const bool has_bias = true;
@@ -52,7 +56,7 @@ TEST(FullyConnectedLayer, layer_forward_backward_test) {
     fc->init_layer();
 
     // forward
-    output = fc->forward(input);
+    fc->forward(input, output);
 
     ASSERT_EQ(output[0]->size_, 8);
     display_matrix("fc->bottom", input[0]->data_,
@@ -67,21 +71,22 @@ TEST(FullyConnectedLayer, layer_forward_backward_test) {
                    output[0]->shape_.back());
 
     // backward
-    Bean *top_bean = new Bean({2, 4});
+    std::vector<int> top_shape = {2, 4};
+    std::shared_ptr<Bean> top_bean = std::make_shared<Bean>(top_shape);
     for (int i = 0; i < 8; ++i) {
         top_bean->diff_[i] = i - 4;
     }
-    vector<Bean *> top = {top_bean};
+    vector<std::shared_ptr<Bean>> top = {top_bean};
 
-    auto bottom = fc->backward(top);
+    fc->backward(input, top);
 
-    ASSERT_EQ(bottom[0]->shape_, input[0]->shape_);
+    ASSERT_EQ(input[0]->shape_, input[0]->shape_);
     display_matrix("fc->top diff", top[0]->diff_, 2, 4);
     display_matrix("fc->weight diff", fc->get_weight()->diff_,
                    in_features, out_features);
     display_matrix("fc->bias diff", fc->get_bias()->diff_,
                    1, out_features);
-    display_matrix("fc->bottom diff", bottom[0]->diff_, 2, 3);
+    display_matrix("fc->bottom diff", input[0]->diff_, 2, 3);
 }
 // -------------------- FullyConnectedLayer --------------------
 
@@ -101,57 +106,71 @@ TEST(L1LossLayer, layer_init_test) {
 }
 
 TEST(L1LossLayer, layer_forward_test) {
-    Bean *input_bean = new Bean({3, 4});
-    Bean *label = new Bean({3, 4});
-    std::vector<Bean *> input = {input_bean, label};
+    std::vector<int> input_shape = {3, 4};
+    std::shared_ptr<Bean> input_bean = std::make_shared<Bean>(input_shape);
+    std::shared_ptr<Bean> label = std::make_shared<Bean>(input_shape);
+    std::vector<std::shared_ptr<Bean>> input = {input_bean, label};
     for (auto i:input) {
-        normal(i);
+        normal(i.get());
     }
 
+    std::vector<int> output_shape = {3, 4};
+    std::shared_ptr<Bean> top_bean = std::make_shared<Bean>(output_shape);
+    std::vector<std::shared_ptr<Bean>> output = {top_bean};
+
     L1LossLayer *l1 = new L1LossLayer("l1", L1LossLayer::NONE);
-    std::vector<Bean *> output1 = l1->forward(input);
-    display_matrix("none l1losslayer output", output1[0]->data_, 3, 4);
+    l1->forward(input, output);
+    display_matrix("none l1losslayer output", output[0]->data_, 3, 4);
 
     L1LossLayer *l2 = new L1LossLayer("l2");
-    std::vector<Bean *> output2 = l2->forward(input);
-    ASSERT_EQ(output2[0]->size_, 1);
-    display_matrix("mean l1losslayer output", output2[0]->data_, 1, 1);
+    l2->forward(input, output);
+    ASSERT_EQ(output[0]->size_, 1);
+    display_matrix("mean l2losslayer output", output[0]->data_, 1, 1);
 
     L1LossLayer *l3 = new L1LossLayer("l3", L1LossLayer::SUM);
-    std::vector<Bean *> output3 = l3->forward(input);
-    ASSERT_EQ(output2[0]->size_, 1);
-    display_matrix("sum l1losslayer output", output3[0]->data_, 1, 1);
-
-    ASSERT_EQ(output3[0]->data_[0] / (3 * 4), output2[0]->data_[0]);
+    l3->forward(input, output);
+    ASSERT_EQ(output[0]->size_, 1);
+    display_matrix("sum l3losslayer output", output[0]->data_, 1, 1);
 }
 
 TEST(L1LossLayer, layer_backward_test) {
-    Bean *input_bean = new Bean({3, 4});
-    Bean *label = new Bean({3, 4});
-    std::vector<Bean *> input = {input_bean, label};
+    std::vector<int> input_shape = {3, 4};
+    std::shared_ptr<Bean> input_bean = std::make_shared<Bean>(input_shape);
+    std::shared_ptr<Bean> label = std::make_shared<Bean>(input_shape);
+    std::vector<std::shared_ptr<Bean>> input = {input_bean, label};
     for (int i = 0; i < 12; ++i) {
         input[0]->data_[i] = i;
     }
-    constant(input[1], 5);
+    constant(input[1].get(), 5);
+
+    std::vector<int> output_shape = {3, 4};
+    std::shared_ptr<Bean> top_bean = std::make_shared<Bean>(output_shape);
+    std::vector<std::shared_ptr<Bean>> output = {top_bean};
 
     L1LossLayer *l1 = new L1LossLayer("l1", L1LossLayer::NONE);
-    auto loss1 = l1->forward(input);
-    display_matrix("none l1losslayer loss", loss1[0]->data_, 3, 4);
-    auto diff1 = l1->backward(loss1);
-    display_matrix("none l1losslayer diff", diff1[0]->diff_, 3, 4);
-    display_matrix("none l1losslayer diff", diff1[1]->diff_, 3, 4);
+    l1->forward(input, output);
+    display_matrix("none l1losslayer loss", output[0]->data_, 3, 4);
+    l1->backward(input, output);
+    display_matrix("none l1losslayer diff", input[0]->diff_, 3, 4);
+    display_matrix("none l1losslayer diff", input[1]->diff_, 3, 4);
 
+    input = {input_bean, label};
+    output = {top_bean};
     L1LossLayer *l2 = new L1LossLayer("l2");
-    auto loss2 = l2->forward(input);
-    display_matrix("mean l2losslayer loss", loss2[0]->data_, 1, 1);
-    auto diff2 = l2->backward(loss2);
-    display_matrix("mean l2losslayer diff", diff2[0]->diff_, 1, 1);
+    l2->forward(input, output);
+    display_matrix("mean l2losslayer loss", output[0]->data_, 1, 1);
+    l2->backward(input, output);
+    display_matrix("mean l2losslayer diff", input[0]->diff_, 1, 1);
+    display_matrix("mean l2losslayer diff", input[1]->diff_, 1, 1);
 
+    input = {input_bean, label};
+    output = {top_bean};
     L1LossLayer *l3 = new L1LossLayer("l3", L1LossLayer::SUM);
-    auto loss3 = l3->forward(input);
-    display_matrix("sum l3losslayer loss", loss3[0]->data_, 1, 1);
-    auto diff3 = l3->backward(loss3);
-    display_matrix("sum l3losslayer diff", diff3[0]->diff_, 1, 1);
+    l3->forward(input, output);
+    display_matrix("sum l3losslayer loss", output[0]->data_, 1, 1);
+    l3->backward(input, output);
+    display_matrix("sum l3losslayer diff", input[0]->diff_, 1, 1);
+    display_matrix("sum l3losslayer diff", input[1]->diff_, 1, 1);
 }
 // -------------------- L1LossLayer --------------------
 

@@ -22,9 +22,11 @@ public:
 
     virtual void init_layer() = 0;
 
-    virtual std::vector<Bean *> forward(std::vector<Bean *> &bottom) = 0;
+    virtual void forward(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) = 0;
 
-    virtual std::vector<Bean *> backward(std::vector<Bean *> &top) = 0;
+    virtual void backward(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) = 0;
+
+    virtual std::vector<std::shared_ptr<Bean>> get_learnable_beans() = 0;
 };
 
 #endif //CAFFEBEAN_LAYER_H
