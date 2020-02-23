@@ -1,0 +1,19 @@
+// Configuration options
+{
+  // Default encoding for text
+  "encoding": "UTF-8",
+  // Plug-ins loaded at start-up
+  "plug-ins": [
+    "python",
+    "c++",
+    // trailing comment
+    "ruby"
+  ],
+  // Tab indent size
+  // (multi-line comment)
+  "indent": {
+    /*embedded comment*/
+    "length": 3,
+    "use_space": true
+  }
+}
