@@ -348,7 +348,6 @@ TEST(Init, normal) {
 
 // -------------------- Solver --------------------
 TEST(Solver, read_json) {
-    Solver *solver = new Solver();
-    solver->read_config("/Users/kaiyu/workspace/CaffeBean/examples/test_net.json");
+    Solver *solver = new Solver("/Users/kaiyu/workspace/CaffeBean/examples/test_net.json");
 }
 // -------------------- Solver --------------------
