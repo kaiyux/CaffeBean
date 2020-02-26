@@ -5,6 +5,8 @@
 #include "../include/bean.h"
 #include <utility>
 
+Bean::Bean() {}
+
 Bean::Bean(int num, int channel, int height, int width) {
     shape_ = std::vector<int>(4);
     shape_[0] = num;

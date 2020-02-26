@@ -16,10 +16,30 @@ void Config::set_type(std::string type) {
     type_ = type;
 }
 
-void Config::add_bottom(std::string bottom) {
+std::string Config::get_type() {
+    return type_;
+}
+
+void Config::add_bottom(const std::string &bottom) {
     bottoms_.push_back(bottom);
 }
 
-void Config::add_top(std::string top) {
+std::vector<std::string> Config::get_bottoms() {
+    return bottoms_;
+}
+
+void Config::add_top(const std::string &top) {
     tops_.push_back(top);
+}
+
+std::vector<std::string> Config::get_tops() {
+    return tops_;
+}
+
+void Config::add_params(std::string param, int value) {
+    params_[param] = value;
+}
+
+std::unordered_map<std::string, int> Config::get_params() {
+    return params_;
 }

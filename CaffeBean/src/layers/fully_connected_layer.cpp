@@ -22,7 +22,8 @@ FullyConnectedLayer::~FullyConnectedLayer() {
     CAFFEBEAN_LOG("layer " << name_ << " deleted");
 }
 
-void FullyConnectedLayer::init_layer() {
+void
+FullyConnectedLayer::init_layer(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) {
     CAFFEBEAN_LOG("initializing FullyConnectedLayer: " << name_ << " ...");
     normal(weight_.get());
     if (has_bias_) {

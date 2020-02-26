@@ -18,7 +18,7 @@ public:
 
     ~L1LossLayer();
 
-    void init_layer();
+    void init_layer(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top);
 
     void forward(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top);
 

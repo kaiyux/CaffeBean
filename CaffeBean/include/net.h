@@ -7,6 +7,9 @@
 
 #include "common.h"
 #include "layer.h"
+#include "config.h"
+#include "layer_factory.h"
+#include "layers/fully_connected_layer.h"
 
 class Net {
 private:
@@ -23,7 +26,7 @@ public:
 
     ~Net();
 
-    void init_net();
+    void init_net(std::vector<std::shared_ptr<Config>> configs);
 
     void forward();
 

@@ -14,11 +14,13 @@ public:
 
     ~InputLayer();
 
-    void init_layer();
+    void init_layer(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top);
 
-    void forward(std::vector<Bean *> &bottom, std::vector<Bean *> &top);
+    void forward(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top);
 
-    void backward(std::vector<Bean *> &bottom, std::vector<Bean *> &top);
+    void backward(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top);
+
+    std::vector<std::shared_ptr<Bean>> get_learnable_beans();
 
     std::vector<Bean *> random_init(std::vector<int> &shape);
 };

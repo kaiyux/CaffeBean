@@ -20,7 +20,7 @@ public:
 
     std::string get_name();
 
-    virtual void init_layer() = 0;
+    virtual void init_layer(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) = 0;
 
     virtual void forward(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) = 0;
 

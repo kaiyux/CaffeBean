@@ -4,16 +4,24 @@
     "type": "Input",
     "bottoms": [],
     "tops": [
-      "fc1"
+      "fc1",
+      "l1loss"
     ]
   },
   {
     "name": "fc1",
     "type": "FullyConnected",
-    "bottoms": [],
+    "bottoms": [
+      "input"
+    ],
     "tops": [
       "fc2"
-    ]
+    ],
+    "params": {
+      "in_features": 3,
+      "out_features": 4,
+      "has_bias": 1
+    }
   },
   {
     "name": "fc2",
@@ -23,7 +31,12 @@
     ],
     "tops": [
       "l1loss"
-    ]
+    ],
+    "params": {
+      "in_features": 4,
+      "out_features": 5,
+      "has_bias": 1
+    }
   },
   {
     "name": "l1loss",

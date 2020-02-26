@@ -3,10 +3,12 @@
 //
 
 #include "../include/solver.h"
+#include "../include/net.h"
 
 Solver::Solver(std::string config_file) {
     config_file_ = config_file;
     read_config();
+    // TODO: check the availability of config file
 }
 
 void Solver::read_config() {
@@ -22,11 +24,15 @@ void Solver::read_config() {
             std::shared_ptr<Config> config(new Config());
             config->set_name(layer["name"].asString());
             config->set_type(layer["type"].asString());
-            for (auto bottom:layer["bottoms"]) {
+            for (const auto &bottom:layer["bottoms"]) {
                 config->add_bottom(bottom.asString());
             }
-            for (auto top:layer["bottoms"]) {
-                config->add_bottom(top.asString());
+            for (const auto &top:layer["bottoms"]) {
+                config->add_top(top.asString());
+            }
+            auto param_keys = layer["params"].getMemberNames();
+            for (auto &param_key : param_keys) {
+                config->add_params(param_key, layer["params"][param_key].asInt());
             }
             configs_.push_back(std::move(config));
         }
@@ -41,5 +47,10 @@ std::vector<std::shared_ptr<Config>> Solver::get_configs() {
 }
 
 void Solver::solve() {
-
+    Net *net = new Net();
+    net->init_net(configs_);
+    net->forward();
+    CAFFEBEAN_LOG("net forward done");
+    net->backward();
+    CAFFEBEAN_LOG("net backward done");
 }

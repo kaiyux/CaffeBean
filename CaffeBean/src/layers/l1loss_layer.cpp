@@ -16,7 +16,7 @@ L1LossLayer::L1LossLayer(const std::string &name, int reduction) : Layer(name) {
 
 L1LossLayer::~L1LossLayer() {}
 
-void L1LossLayer::init_layer() {}
+void L1LossLayer::init_layer(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) {}
 
 void L1LossLayer::forward(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) {
     CAFFEBEAN_LOG(name_ << " forward");
