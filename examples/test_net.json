@@ -45,6 +45,8 @@
       "input",
       "fc2"
     ],
-    "tops": []
+    "tops": [
+      "l1loss"
+    ]
   }
 ]

@@ -28,6 +28,8 @@ public:
     int H();
 
     int W();
+
+    void reshape(std::vector<int> shape);
 };
 
 #endif //CAFFEBEAN_BEAN_H

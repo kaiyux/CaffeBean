@@ -22,9 +22,16 @@ FullyConnectedLayer::~FullyConnectedLayer() {
     CAFFEBEAN_LOG("layer " << name_ << " deleted");
 }
 
-void
-FullyConnectedLayer::init_layer(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) {
+void FullyConnectedLayer::init_layer(std::vector<std::shared_ptr<Bean>> &bottom,
+                                     std::vector<std::shared_ptr<Bean>> &top) {
     CAFFEBEAN_LOG("initializing FullyConnectedLayer: " << name_ << " ...");
+    CAFFEBEAN_ASSERT(bottom.size() == 1, get_name() << " bottom shape incorrect.");
+    CAFFEBEAN_ASSERT(top.size() == 1, get_name() << " top shape incorrect.");
+
+    std::vector<int> top_shape = bottom[0]->shape_;
+    top_shape.back() = out_features_;
+    top[0]->reshape(top_shape);
+
     normal(weight_.get());
     if (has_bias_) {
         zeros(bias_.get());

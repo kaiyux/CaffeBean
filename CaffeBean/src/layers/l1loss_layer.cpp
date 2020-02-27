@@ -16,7 +16,21 @@ L1LossLayer::L1LossLayer(const std::string &name, int reduction) : Layer(name) {
 
 L1LossLayer::~L1LossLayer() {}
 
-void L1LossLayer::init_layer(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) {}
+void L1LossLayer::init_layer(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) {
+    CAFFEBEAN_LOG("initializing L1LossLayer: " << name_ << " ...");
+    const int size = bottom[0]->size_;
+    const int N = bottom[0]->shape_[0];
+    diff_ = new Bean(bottom[0]->shape_);
+
+    std::vector<int> top_shape;
+    if (reduction_ == NONE) {
+        top_shape = bottom[0]->shape_;
+    } else {
+        top_shape = {1};
+    }
+    std::shared_ptr<Bean> bean(new Bean(top_shape));
+    top.push_back(bean);
+}
 
 void L1LossLayer::forward(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) {
     CAFFEBEAN_LOG(name_ << " forward");
@@ -29,19 +43,16 @@ void L1LossLayer::forward(std::vector<std::shared_ptr<Bean>> &bottom, std::vecto
 
     const int size = bottom[0]->size_;
     const int N = bottom[0]->shape_[0];
-    diff_ = new Bean(bottom[0]->shape_);
 
     matrix_sub(bottom[0]->data_, bottom[1]->data_, diff_->data_, N, size / N);
     matrix_abs(diff_->data_, top[0]->data_, N, size / N);
 
     // if reduction = SUM or MEAN, the result will be a scalar
     if (reduction_ == SUM || reduction_ == MEAN) {
-        float res = matrix_sum(top[0]->data_, N, size / N);
+        float res = matrix_sum(top[0]->data_, 1, top[0]->size_);
         if (reduction_ == MEAN) {
             res /= (float) size;
         }
-        std::vector<int> top_bean = {1};
-        top[0] = std::make_shared<Bean>(top_bean);
         top[0]->data_[0] = res;
     }
     top[0]->diff_[0] = 1;

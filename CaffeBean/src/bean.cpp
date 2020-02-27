@@ -48,3 +48,13 @@ int Bean::H() {
 int Bean::W() {
     return this->shape_[3];
 }
+
+void Bean::reshape(std::vector<int> shape) {
+    shape_ = std::move(shape);
+    size_ = 1;
+    for (auto s:shape_) {
+        size_ *= s;
+    }
+    data_ = new float[size_]();
+    diff_ = new float[size_]();
+}

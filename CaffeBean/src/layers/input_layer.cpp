@@ -12,7 +12,14 @@ InputLayer::~InputLayer() {
     CAFFEBEAN_LOG("layer " << name_ << " deleted");
 }
 
-void InputLayer::init_layer(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) {}
+void InputLayer::init_layer(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) {
+    // TODO: temporarily using random init & explicitly giving shape
+    CAFFEBEAN_LOG("random init input...");
+    std::vector<int> input_shape = {2, 3};
+    std::vector<int> label_shape = {2, 5};
+    top[0]->reshape(input_shape);
+    top[1]->reshape(label_shape);
+}
 
 void InputLayer::forward(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) {
     CAFFEBEAN_LOG(name_ << " forward");
