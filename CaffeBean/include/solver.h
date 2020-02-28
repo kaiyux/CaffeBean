@@ -17,9 +17,15 @@ private:
     float learning_rate_;
     int step_, display_step_;
 public:
+    Solver(std::string train_cfg);
+
     Solver(std::string config_file, float learning_rate_, int step, int display_step);
 
-    void read_config();
+    void read_train_config(std::string);
+
+    void read_net_config();
+
+    // TODO: check the availability of config file
 
     std::vector<std::shared_ptr<Config>> get_configs();
 

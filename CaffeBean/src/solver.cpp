@@ -5,16 +5,39 @@
 #include "../include/solver.h"
 #include "../include/net.h"
 
+Solver::Solver(std::string train_cfg) {
+    read_train_config(train_cfg);
+    read_net_config();
+}
+
 Solver::Solver(std::string config_file, float learning_rate, int step, int display_step) {
     config_file_ = config_file;
     learning_rate_ = learning_rate;
     step_ = step;
     display_step_ = display_step;
-    read_config();
-    // TODO: check the availability of config file
+    read_net_config();
 }
 
-void Solver::read_config() {
+void Solver::read_train_config(std::string train_cfg) {
+    std::ifstream ifs;
+    ifs.open(train_cfg);
+    Json::Reader reader;
+    Json::Value root;
+    if (reader.parse(ifs, root)) {
+        std::cout << "Get config file: " << train_cfg << std::endl;
+        std::cout << root;
+        std::cout << std::endl;
+        config_file_ = root["net"].asString();
+        learning_rate_ = root["lr"].asFloat();
+        step_ = root["step"].asInt();
+        display_step_ = root["display_step"].asInt();;
+    } else {
+        std::cout << "Something's wrong with file: " << config_file_ << std::endl;
+    }
+    ifs.close();
+}
+
+void Solver::read_net_config() {
     std::ifstream ifs;
     ifs.open(config_file_);
     Json::Reader reader;

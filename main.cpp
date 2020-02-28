@@ -3,10 +3,8 @@
 
 int main() {
     std::cout << "Hello, CaffeBean!" << std::endl;
-    std::string config_file = "/Users/kaiyu/workspace/CaffeBean/examples/test_net.json";
-    float learning_rate = 0.01;
-    int step = 2000, display_step = 100;
-    Solver *solver = new Solver(config_file, learning_rate, step, display_step);
+    std::string train_cfg = "/Users/kaiyu/workspace/CaffeBean/examples/train_cfg.json";
+    Solver *solver = new Solver(train_cfg);
     solver->solve();
     return 0;
 }
