@@ -11,15 +11,6 @@ Net::Net() {}
 
 Net::~Net() {}
 
-void Net::print_net() {
-    CAFFEBEAN_LOG("----------------------");
-    CAFFEBEAN_LOG("layers include: ");
-    for (auto &layer : layers_) {
-        CAFFEBEAN_LOG(layer->get_name());
-    }
-    CAFFEBEAN_LOG("----------------------");
-}
-
 void Net::init_net(std::vector<std::shared_ptr<Config>> configs) {
     CAFFEBEAN_LOG("constructing net...");
 
@@ -82,4 +73,27 @@ void Net::backward() {
     for (int i = layers_.size() - 1; i >= 0; --i) {
         layers_[i]->backward(bottoms_[i], tops_[i]);
     }
+}
+
+void Net::update(float learning_rate) {
+    // TODO: use Eigen
+    for (auto bean:learnable_beans_) {
+        for (int i = 0; i < bean->size_; ++i) {
+            bean->data_[i] += learning_rate * (-bean->diff_[i]);
+        }
+    }
+}
+
+float *Net::get_output() {
+    return tops_[tops_.size() - 2][0]->data_;
+}
+
+float Net::get_loss() {
+    // TODO: use Eigen
+    auto loss_bean = tops_.back()[0];
+    float loss = 0;
+    for (int i = 0; i < loss_bean->size_; ++i) {
+        loss += loss_bean->data_[i];
+    }
+    return loss;
 }

@@ -32,7 +32,11 @@ public:
 
     void backward();
 
-    void print_net();
+    void update(float learning_rate);
+
+    float *get_output();
+
+    float get_loss();
 };
 
 #endif //CAFFEBEAN_NET_H

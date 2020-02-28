@@ -39,7 +39,6 @@ void FullyConnectedLayer::init_layer(std::vector<std::shared_ptr<Bean>> &bottom,
 }
 
 void FullyConnectedLayer::forward(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) {
-    CAFFEBEAN_LOG(name_ << " forward");
     CAFFEBEAN_ASSERT(bottom[0]->shape_.back() == in_features_,
                      bottom[0]->shape_.back() << " != " << in_features_);
 
@@ -69,7 +68,6 @@ void FullyConnectedLayer::forward(std::vector<std::shared_ptr<Bean>> &bottom, st
 
 void FullyConnectedLayer::backward(std::vector<std::shared_ptr<Bean>> &bottom,
                                    std::vector<std::shared_ptr<Bean>> &top) {
-    CAFFEBEAN_LOG(name_ << " backward");
     CAFFEBEAN_ASSERT(top[0]->shape_.back() == out_features_,
                      top[0]->shape_.back() << "!=" << out_features_);
 

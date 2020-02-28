@@ -33,7 +33,6 @@ void L1LossLayer::init_layer(std::vector<std::shared_ptr<Bean>> &bottom, std::ve
 }
 
 void L1LossLayer::forward(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) {
-    CAFFEBEAN_LOG(name_ << " forward");
     CAFFEBEAN_ASSERT(bottom.size() == 2,
                      "There should be 2 input.");
     CAFFEBEAN_ASSERT(bottom[0]->shape_ == bottom[1]->shape_,
@@ -59,7 +58,6 @@ void L1LossLayer::forward(std::vector<std::shared_ptr<Bean>> &bottom, std::vecto
 }
 
 void L1LossLayer::backward(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) {
-    CAFFEBEAN_LOG(name_ << " backward");
     const int size = diff_->size_;
     const int N = diff_->shape_[0];
     for (int i = 0; i < 2; ++i) {

@@ -19,15 +19,17 @@ void InputLayer::init_layer(std::vector<std::shared_ptr<Bean>> &bottom, std::vec
     std::vector<int> label_shape = {2, 5};
     top[0]->reshape(input_shape);
     top[1]->reshape(label_shape);
+    normal(top[0].get(), 5, 1);
+    for (int i = 0; i < 2 * 5; ++i) {
+        top[1]->data_[i] = float(i);
+    }
+    display_matrix("input", top[0]->data_, 2, 3);
+    display_matrix("label", top[1]->data_, 2, 5);
 }
 
-void InputLayer::forward(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) {
-    CAFFEBEAN_LOG(name_ << " forward");
-}
+void InputLayer::forward(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) {}
 
-void InputLayer::backward(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) {
-    CAFFEBEAN_LOG(name_ << " backward");
-}
+void InputLayer::backward(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) {}
 
 std::vector<std::shared_ptr<Bean>> InputLayer::get_learnable_beans() {
     return {};

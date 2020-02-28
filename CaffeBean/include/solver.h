@@ -14,8 +14,10 @@ class Solver {
 private:
     std::string config_file_;
     std::vector<std::shared_ptr<Config>> configs_;
+    float learning_rate_;
+    int step_, display_step_;
 public:
-    Solver(std::string config_file);
+    Solver(std::string config_file, float learning_rate_, int step, int display_step);
 
     void read_config();
 

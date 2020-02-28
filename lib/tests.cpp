@@ -54,7 +54,7 @@ TEST(FullyConnectedLayer, layer_forward_backward_test) {
     const int in_features = 3, out_features = 4;
     const bool has_bias = true;
     FullyConnectedLayer *fc = new FullyConnectedLayer("test_fc", in_features, out_features, has_bias);
-    fc->init_layer();
+    fc->init_layer(input, output);
 
     // forward
     fc->forward(input, output);
@@ -96,14 +96,17 @@ TEST(L1LossLayer, layer_init_test) {
     L1LossLayer *l1 = new L1LossLayer("l1", L1LossLayer::NONE);
     int none = L1LossLayer::NONE;
     ASSERT_EQ(l1->get_reduction(), none);
+    delete l1;
 
     L1LossLayer *l2 = new L1LossLayer("l2");
     int mean = L1LossLayer::MEAN;
     ASSERT_EQ(l2->get_reduction(), mean);
+    delete l2;
 
     L1LossLayer *l3 = new L1LossLayer("l3", L1LossLayer::SUM);
     int sum = L1LossLayer::SUM;
     ASSERT_EQ(l3->get_reduction(), sum);
+    delete l3;
 }
 
 TEST(L1LossLayer, layer_forward_test) {
@@ -122,16 +125,19 @@ TEST(L1LossLayer, layer_forward_test) {
     L1LossLayer *l1 = new L1LossLayer("l1", L1LossLayer::NONE);
     l1->forward(input, output);
     display_matrix("none l1losslayer output", output[0]->data_, 3, 4);
+    delete l1;
 
     L1LossLayer *l2 = new L1LossLayer("l2");
     l2->forward(input, output);
     ASSERT_EQ(output[0]->size_, 1);
     display_matrix("mean l2losslayer output", output[0]->data_, 1, 1);
+    delete l2;
 
     L1LossLayer *l3 = new L1LossLayer("l3", L1LossLayer::SUM);
     l3->forward(input, output);
     ASSERT_EQ(output[0]->size_, 1);
     display_matrix("sum l3losslayer output", output[0]->data_, 1, 1);
+    delete l3;
 }
 
 TEST(L1LossLayer, layer_backward_test) {
@@ -154,6 +160,7 @@ TEST(L1LossLayer, layer_backward_test) {
     l1->backward(input, output);
     display_matrix("none l1losslayer diff", input[0]->diff_, 3, 4);
     display_matrix("none l1losslayer diff", input[1]->diff_, 3, 4);
+    delete l1;
 
     input = {input_bean, label};
     output = {top_bean};
@@ -163,6 +170,7 @@ TEST(L1LossLayer, layer_backward_test) {
     l2->backward(input, output);
     display_matrix("mean l2losslayer diff", input[0]->diff_, 1, 1);
     display_matrix("mean l2losslayer diff", input[1]->diff_, 1, 1);
+    delete l2;
 
     input = {input_bean, label};
     output = {top_bean};
@@ -172,6 +180,7 @@ TEST(L1LossLayer, layer_backward_test) {
     l3->backward(input, output);
     display_matrix("sum l3losslayer diff", input[0]->diff_, 1, 1);
     display_matrix("sum l3losslayer diff", input[1]->diff_, 1, 1);
+    delete l3;
 }
 // -------------------- L1LossLayer --------------------
 
@@ -348,6 +357,10 @@ TEST(Init, normal) {
 
 // -------------------- Solver --------------------
 TEST(Solver, read_json) {
-    Solver *solver = new Solver("/Users/kaiyu/workspace/CaffeBean/examples/test_net.json");
+    std::string config_file = "/Users/kaiyu/workspace/CaffeBean/examples/test_net.json";
+    float learning_rate = 0.01;
+    int step = 10, display_step = 1;
+    Solver *solver = new Solver(config_file, learning_rate, step, display_step);
+    delete solver;
 }
 // -------------------- Solver --------------------
