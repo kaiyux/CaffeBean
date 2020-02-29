@@ -76,6 +76,7 @@ void Solver::solve() {
     Net *net = new Net();
     net->init_net(configs_);
 
+    auto tik = time(nullptr);
     for (int i = 0; i < step_; ++i) {
         if (i % display_step_ == 0) {
             CAFFEBEAN_LOG("step: " << i);
@@ -86,6 +87,8 @@ void Solver::solve() {
         net->backward();
         net->update(learning_rate_);
     }
+    auto tok = time(nullptr);
+    CAFFEBEAN_LOG("total time: " << tok - tik << "s");
     CAFFEBEAN_LOG("loss: " << net->get_loss());
     display_matrix("output", net->get_output(), 2, 5);
 }

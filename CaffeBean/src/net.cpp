@@ -76,11 +76,10 @@ void Net::backward() {
 }
 
 void Net::update(float learning_rate) {
-    // TODO: use Eigen
     for (auto bean:learnable_beans_) {
-        for (int i = 0; i < bean->size_; ++i) {
-            bean->data_[i] += learning_rate * (-bean->diff_[i]);
-        }
+        auto *delta = new float[bean->size_]();
+        matrix_multiply_constant(bean->diff_, delta, -learning_rate, 1, bean->size_);
+        matrix_add(bean->data_, delta, bean->data_, 1, bean->size_);
     }
 }
 
@@ -89,11 +88,6 @@ float *Net::get_output() {
 }
 
 float Net::get_loss() {
-    // TODO: use Eigen
     auto loss_bean = tops_.back()[0];
-    float loss = 0;
-    for (int i = 0; i < loss_bean->size_; ++i) {
-        loss += loss_bean->data_[i];
-    }
-    return loss;
+    return matrix_sum(loss_bean->data_, 1, loss_bean->size_);
 }
