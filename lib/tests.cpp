@@ -5,8 +5,11 @@
 #include "gtest/gtest.h"
 #include <iostream>
 #include "../CaffeBean/include/bean.h"
+
 #include "../CaffeBean/include/layers/fully_connected_layer.h"
 #include "../CaffeBean/include/layers/l1loss_layer.h"
+#include "../CaffeBean/include/layers/relu_layer.h"
+
 #include "../CaffeBean/include/math_function.h"
 #include "../CaffeBean/include/solver.h"
 
@@ -88,6 +91,8 @@ TEST(FullyConnectedLayer, layer_forward_backward_test) {
     display_matrix("fc->bias diff", fc->get_bias()->diff_,
                    1, out_features);
     display_matrix("fc->bottom diff", input[0]->diff_, 2, 3);
+
+    delete fc;
 }
 // -------------------- FullyConnectedLayer --------------------
 
@@ -118,25 +123,30 @@ TEST(L1LossLayer, layer_forward_test) {
         normal(i.get());
     }
 
-    std::vector<int> output_shape = {3, 4};
-    std::shared_ptr<Bean> top_bean = std::make_shared<Bean>(output_shape);
-    std::vector<std::shared_ptr<Bean>> output = {top_bean};
-
+    std::vector<std::shared_ptr<Bean>> output1;
     L1LossLayer *l1 = new L1LossLayer("l1", L1LossLayer::NONE);
-    l1->forward(input, output);
-    display_matrix("none l1losslayer output", output[0]->data_, 3, 4);
+    l1->init_layer(input, output1);
+    l1->forward(input, output1);
+    display_matrix("none l1losslayer output", output1[0]->data_, 3, 4);
     delete l1;
 
+    std::vector<std::shared_ptr<Bean>> output2;
     L1LossLayer *l2 = new L1LossLayer("l2");
-    l2->forward(input, output);
-    ASSERT_EQ(output[0]->size_, 1);
-    display_matrix("mean l2losslayer output", output[0]->data_, 1, 1);
+    l2->init_layer(input, output2);
+    l2->forward(input, output2);
+    ASSERT_EQ(output2[0]->size_, 1);
+    display_matrix("mean l1losslayer output", output2[0]->data_, 1, 1);
+    CAFFEBEAN_LOG("111");
+    output2.clear();
     delete l2;
 
+    std::vector<std::shared_ptr<Bean>> output3;
     L1LossLayer *l3 = new L1LossLayer("l3", L1LossLayer::SUM);
-    l3->forward(input, output);
-    ASSERT_EQ(output[0]->size_, 1);
-    display_matrix("sum l3losslayer output", output[0]->data_, 1, 1);
+    l3->init_layer(input, output3);
+    l3->forward(input, output3);
+    ASSERT_EQ(output3[0]->size_, 1);
+    display_matrix("sum l1losslayer output", output3[0]->data_, 1, 1);
+    output3.clear();
     delete l3;
 }
 
@@ -150,39 +160,70 @@ TEST(L1LossLayer, layer_backward_test) {
     }
     constant(input[1].get(), 5);
 
-    std::vector<int> output_shape = {3, 4};
-    std::shared_ptr<Bean> top_bean = std::make_shared<Bean>(output_shape);
-    std::vector<std::shared_ptr<Bean>> output = {top_bean};
-
+    std::vector<std::shared_ptr<Bean>> output1;
     L1LossLayer *l1 = new L1LossLayer("l1", L1LossLayer::NONE);
-    l1->forward(input, output);
-    display_matrix("none l1losslayer loss", output[0]->data_, 3, 4);
-    l1->backward(input, output);
+    l1->init_layer(input, output1);
+    l1->forward(input, output1);
+    display_matrix("none l1losslayer loss", output1[0]->data_, 3, 4);
+    l1->backward(input, output1);
     display_matrix("none l1losslayer diff", input[0]->diff_, 3, 4);
     display_matrix("none l1losslayer diff", input[1]->diff_, 3, 4);
     delete l1;
 
+    std::vector<std::shared_ptr<Bean>> output2;
     input = {input_bean, label};
-    output = {top_bean};
     L1LossLayer *l2 = new L1LossLayer("l2");
-    l2->forward(input, output);
-    display_matrix("mean l2losslayer loss", output[0]->data_, 1, 1);
-    l2->backward(input, output);
+    l2->init_layer(input, output2);
+    l2->forward(input, output2);
+    display_matrix("mean l2losslayer loss", output2[0]->data_, 1, 1);
+    l2->backward(input, output2);
     display_matrix("mean l2losslayer diff", input[0]->diff_, 1, 1);
     display_matrix("mean l2losslayer diff", input[1]->diff_, 1, 1);
     delete l2;
 
+    std::vector<std::shared_ptr<Bean>> output3;
     input = {input_bean, label};
-    output = {top_bean};
     L1LossLayer *l3 = new L1LossLayer("l3", L1LossLayer::SUM);
-    l3->forward(input, output);
-    display_matrix("sum l3losslayer loss", output[0]->data_, 1, 1);
-    l3->backward(input, output);
+    l3->init_layer(input, output3);
+    l3->forward(input, output3);
+    display_matrix("sum l3losslayer loss", output3[0]->data_, 1, 1);
+    l3->backward(input, output3);
     display_matrix("sum l3losslayer diff", input[0]->diff_, 1, 1);
     display_matrix("sum l3losslayer diff", input[1]->diff_, 1, 1);
     delete l3;
 }
 // -------------------- L1LossLayer --------------------
+
+// -------------------- ReluLayer --------------------
+TEST(ReluLayer, layer_test) {
+    std::vector<std::shared_ptr<Bean>> bottom, top;
+    std::vector<int> shape = {2, 5};
+    auto bottom_bean = std::make_shared<Bean>(shape);
+    for (int i = 0; i < bottom_bean->size_; ++i) {
+        bottom_bean->data_[i] = float(i) - 5;
+    }
+    bottom.push_back(bottom_bean);
+    std::shared_ptr<Bean> top_bean(new Bean());
+    top.push_back(top_bean);
+
+    auto relu = new ReluLayer("relu");
+    relu->init_layer(bottom, top);
+    relu->forward(bottom, top);
+
+    for (int i = 0; i < top[0]->size_; ++i) {
+        top[0]->diff_[i] = float(i);
+    }
+
+    relu->backward(bottom, top);
+
+    display_matrix("bottom data", bottom_bean->data_, 2, 5);
+    display_matrix("top data", top[0]->data_, 2, 5);
+    display_matrix("top diff", top[0]->diff_, 2, 5);
+    display_matrix("bottom diff", bottom_bean->diff_, 2, 5);
+
+    delete relu;
+}
+// -------------------- ReluLayer --------------------
 
 // -------------------- Math_fuction --------------------
 TEST(Math_fuction, Eigen_test) {
@@ -301,6 +342,7 @@ TEST(Math_fuction, matrix_transpose) {
     matrix_transpose(a, b, 5, 4);
     display_matrix("transpose", b, 4, 5);
     delete[]a;
+    delete[]b;
 }
 // -------------------- Math_fuction --------------------
 
@@ -314,6 +356,7 @@ TEST(Init, constant) {
         ASSERT_EQ(bean->data_[i], val);
         ASSERT_EQ(bean->diff_[i], val);
     }
+    delete bean;
 }
 
 TEST(Init, ones) {
@@ -325,6 +368,7 @@ TEST(Init, ones) {
         ASSERT_EQ(bean->data_[i], val);
         ASSERT_EQ(bean->diff_[i], val);
     }
+    delete bean;
 }
 
 TEST(Init, zeros) {
@@ -336,6 +380,7 @@ TEST(Init, zeros) {
         ASSERT_EQ(bean->data_[i], val);
         ASSERT_EQ(bean->diff_[i], val);
     }
+    delete bean;
 }
 
 TEST(Init, eye) {
@@ -343,6 +388,7 @@ TEST(Init, eye) {
     Bean *bean = new Bean(shape);
     eye(bean);
     display_matrix("eye", bean->data_, 4, 5);
+    delete bean;
 }
 
 TEST(Init, normal) {
@@ -352,6 +398,7 @@ TEST(Init, normal) {
     display_matrix("normal", bean->data_, 4, 5);
     normal(bean, 10, 1);
     display_matrix("normal", bean->data_, 4, 5);
+    delete bean;
 }
 // -------------------- Init --------------------
 

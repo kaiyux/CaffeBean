@@ -29,6 +29,9 @@ std::unique_ptr<Layer> LayerFactory::create_layer(const std::shared_ptr<Config> 
             CAFFEBEAN_LOG(config->get_type() << ": " << config->get_name() << " done.");
             return l1loss;
         }
+    } else if (config->get_type() == "Relu") {
+        std::unique_ptr<Layer> relu(new ReluLayer(config->get_name()));
+        return relu;
     } else {
         CAFFEBEAN_LOG(config->get_type() << ": " << config->get_name() << " not implmented.");
     }

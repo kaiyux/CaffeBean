@@ -11,6 +11,7 @@
 #include "layers/input_layer.h"
 #include "layers/fully_connected_layer.h"
 #include "layers/l1loss_layer.h"
+#include "layers/relu_layer.h"
 
 class LayerFactory {
 public:
