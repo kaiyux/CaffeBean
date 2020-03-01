@@ -24,3 +24,15 @@ Now you are ready to go!
 ### 🗓Progress
 * Fully Connected Layer  
 * L1 Loss Layer
+* Relu Layer  
+### ✏️TODO
+* Finish as more layers as possible
+* A good image processor (opencv?)
+* A dataset loader
+* A python API
+### 💪🏻If by any chance you want to contribute
+* Write the code
+* Add unit test in ```CaffeBean/lib/tests.cpp```
+* PR
+### 🎯What's more
+* It's a toy, don't be serious
