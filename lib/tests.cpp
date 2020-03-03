@@ -9,6 +9,7 @@
 #include "../CaffeBean/include/layers/fully_connected_layer.h"
 #include "../CaffeBean/include/layers/l1loss_layer.h"
 #include "../CaffeBean/include/layers/relu_layer.h"
+#include "../CaffeBean/include/layers/pooling_layer.h"
 
 #include "../CaffeBean/include/math_function.h"
 #include "../CaffeBean/include/solver.h"
@@ -224,6 +225,35 @@ TEST(ReluLayer, layer_test) {
     delete relu;
 }
 // -------------------- ReluLayer --------------------
+
+// -------------------- PoolingLayer --------------------
+TEST(PoolingLayer, layer_test) {
+    std::vector<std::shared_ptr<Bean>> bottom, top;
+    std::vector<int> shape = {1, 1, 5, 5};
+    auto bottom_bean = std::make_shared<Bean>(shape);
+    for (int i = 0; i < bottom_bean->size_; ++i) {
+        bottom_bean->data_[i] = float(i);
+    }
+    bottom.push_back(bottom_bean);
+    std::shared_ptr<Bean> top_bean(new Bean());
+    top.push_back(top_bean);
+
+    auto maxpooling = new PoolingLayer("maxpooling", "MAX", 3, 1, 0, 1, true);
+    maxpooling->init_layer(bottom, top);
+    ASSERT_EQ(top[0]->size_, 9);
+
+    maxpooling->forward(bottom, top);
+    display_matrix("maxpooling input", bottom[0]->data_, 5, 5);
+    display_matrix("maxpooling output", top[0]->data_, 3, 3);
+
+    for (int i = 0; i < top[0]->size_; ++i) {
+        top[0]->diff_[i] = float(i);
+    }
+
+    maxpooling->backward(bottom, top);
+    display_matrix("maxpooling diff", bottom[0]->diff_, 5, 5);
+}
+// -------------------- PoolingLayer --------------------
 
 // -------------------- Math_fuction --------------------
 TEST(Math_fuction, Eigen_test) {
