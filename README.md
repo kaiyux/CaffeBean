@@ -1,5 +1,5 @@
 # CaffeBean
-## A deep learning framework in cpp
+## A deep learning framework in cpp [**NOT COMPLETED YET**]
 The implementation of this code is heavily borrowed from [Caffe](https://github.com/BVLC/caffe), runs only on cpu and the efficiency should be extremely low(when it's completed), help me with it if you're interested 😉 
 ***
 ### 🗒This repo include:  
@@ -25,6 +25,7 @@ Now you are ready to go!
 * Fully Connected Layer  
 * L1 Loss Layer
 * Relu Layer  
+* Pooling Layer(working on it)
 ### ✏️TODO
 * Finish as more layers as possible
 * A good image processor (opencv?)
