@@ -13,6 +13,7 @@
 class Solver {
 private:
     std::string config_file_;
+    std::string model_path_;
     std::vector<std::shared_ptr<Config>> configs_;
     float learning_rate_;
     int step_, display_step_;
@@ -30,6 +31,8 @@ public:
     std::vector<std::shared_ptr<Config>> get_configs();
 
     void solve();
+
+    void infer();
 };
 
 #endif //CAFFEBEAN_SOLVER_H

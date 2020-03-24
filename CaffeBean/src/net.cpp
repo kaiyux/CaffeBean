@@ -3,8 +3,6 @@
 //
 
 #include "../include/net.h"
-#include <layers/fully_connected_layer.h>
-#include <layers/l1loss_layer.h>
 #include <layers/input_layer.h>
 
 Net::Net() {}
@@ -80,6 +78,24 @@ void Net::update(float learning_rate) {
         auto *delta = new float[bean->size_]();
         matrix_multiply_constant(bean->diff_, delta, -learning_rate, 1, bean->size_);
         matrix_add(bean->data_, delta, bean->data_, 1, bean->size_);
+    }
+}
+
+void Net::save(std::string path) {
+    for (auto &layer : layers_) {
+        if (!layer->get_learnable_beans().empty()) {
+            auto model_name = path + layer->get_name() + ".model"; // TODO: simply add could make mistakes
+            save_model(layer->get_learnable_beans(), model_name);
+        }
+    }
+}
+
+void Net::load(std::string path) {
+    for (auto &layer : layers_) {
+        if (!layer->get_learnable_beans().empty()) {
+            auto model_name = path + layer->get_name() + ".model";
+            load_model(layer->get_learnable_beans(), model_name);
+        }
     }
 }
 

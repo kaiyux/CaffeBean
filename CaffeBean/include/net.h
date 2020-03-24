@@ -9,7 +9,7 @@
 #include "layer.h"
 #include "config.h"
 #include "layer_factory.h"
-#include "layers/fully_connected_layer.h"
+#include "io.h"
 
 class Net {
 private:
@@ -33,6 +33,10 @@ public:
     void backward();
 
     void update(float learning_rate);
+
+    void save(std::string path);
+
+    void load(std::string path);
 
     float *get_output();
 

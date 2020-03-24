@@ -10,7 +10,7 @@ Solver::Solver(std::string train_cfg) {
     read_net_config();
 }
 
-Solver::Solver(std::string config_file, float learning_rate, int step, int display_step) {
+Solver::Solver(std::string config_file, float learning_rate, int step, int display_step) { // deprecated
     config_file_ = config_file;
     learning_rate_ = learning_rate;
     step_ = step;
@@ -28,6 +28,7 @@ void Solver::read_train_config(std::string train_cfg) {
         std::cout << root;
         std::cout << std::endl;
         config_file_ = root["net"].asString();
+        model_path_ = root["model_path"].asString();
         learning_rate_ = root["lr"].asFloat();
         step_ = root["step"].asInt();
         display_step_ = root["display_step"].asInt();;
@@ -73,6 +74,7 @@ std::vector<std::shared_ptr<Config>> Solver::get_configs() {
 }
 
 void Solver::solve() {
+    CAFFEBEAN_LOG("start training...");
     Net *net = new Net();
     net->init_net(configs_);
 
@@ -87,8 +89,28 @@ void Solver::solve() {
         net->backward();
         net->update(learning_rate_);
     }
+    net->save(model_path_);
     auto tok = time(nullptr);
     CAFFEBEAN_LOG("total time: " << tok - tik << "s");
     CAFFEBEAN_LOG("loss: " << net->get_loss());
     display_matrix("output", net->get_output(), 2, 5);
+    CAFFEBEAN_LOG("training ended");
 }
+
+void Solver::infer() {
+    CAFFEBEAN_LOG("inferring");
+    Net *net = new Net();
+    net->init_net(configs_);
+    net->load(model_path_);
+
+    auto tik = time(nullptr);
+    net->forward();
+    auto tok = time(nullptr);
+
+    CAFFEBEAN_LOG("total time: " << tok - tik << "s");
+    CAFFEBEAN_LOG("loss: " << net->get_loss());
+    display_matrix("output", net->get_output(), 2, 5);
+    CAFFEBEAN_LOG("inferring ended");
+}
+
+

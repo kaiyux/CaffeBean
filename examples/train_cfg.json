@@ -1,5 +1,6 @@
 {
   "net": "/Users/kaiyu/workspace/CaffeBean/examples/test_net.json",
+  "model_path": "/Users/kaiyu/workspace/CaffeBean/examples/model/",
   "lr": 0.01,
   "step": 2000,
   "display_step": 100

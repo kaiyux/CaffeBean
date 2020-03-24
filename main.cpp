@@ -6,5 +6,6 @@ int main() {
     std::string train_cfg = "/Users/kaiyu/workspace/CaffeBean/examples/train_cfg.json";
     Solver *solver = new Solver(train_cfg);
     solver->solve();
+    solver->infer();
     return 0;
 }

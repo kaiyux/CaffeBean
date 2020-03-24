@@ -1,4 +1,5 @@
 .idea
 cmake-build-debug
+examples/model
 
 .DS_Store

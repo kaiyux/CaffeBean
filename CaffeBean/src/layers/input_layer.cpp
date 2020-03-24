@@ -19,7 +19,11 @@ void InputLayer::init_layer(std::vector<std::shared_ptr<Bean>> &bottom, std::vec
     std::vector<int> label_shape = {2, 5};
     top[0]->reshape(input_shape);
     top[1]->reshape(label_shape);
-    normal(top[0].get(), 5, 1);
+
+    float input[6] = {6.87926, 4.36403, 5.73078, 5.96791, 5.55232, 5.73246};
+    for (int i = 0; i < 2 * 3; ++i) {
+        top[0]->data_[i] = input[i];
+    }
     for (int i = 0; i < 2 * 5; ++i) {
         top[1]->data_[i] = float(i);
     }
