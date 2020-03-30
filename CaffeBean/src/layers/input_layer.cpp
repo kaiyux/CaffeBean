@@ -8,6 +8,10 @@ InputLayer::InputLayer(const std::string &name) : Layer(name) {
     CAFFEBEAN_LOG("creating FullyConnectedLayer: " << name << " ...");
 }
 
+InputLayer::InputLayer(const std::shared_ptr<Config> &config) : Layer(config->get_name()) {
+    CAFFEBEAN_LOG("creating FullyConnectedLayer: " << config->get_name() << " ...");
+}
+
 InputLayer::~InputLayer() {
     CAFFEBEAN_LOG("layer " << name_ << " deleted");
 }

@@ -16,6 +16,8 @@ private:
 public:
     FullyConnectedLayer(const std::string &name, int in_features, int out_features, bool has_bias);
 
+    FullyConnectedLayer(const std::shared_ptr<Config> &config);
+
     ~FullyConnectedLayer();
 
     void init_layer(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top);

@@ -4,50 +4,45 @@
 
 #include "../include/layer_factory.h"
 
-std::unique_ptr<Layer> LayerFactory::create_layer(const std::shared_ptr<Config> &config) {
-    const std::string type = config->get_type();
-    if (type == "Input") {
-        auto params = config->get_params();
-        std::unique_ptr<Layer> input(new InputLayer(config->get_name()));
-        CAFFEBEAN_LOG(type << ": " << config->get_name() << " done.");
-        return input;
-    } else if (type == "FullyConnected") {
-        auto params = config->get_params();
-        std::unique_ptr<Layer> fc(new FullyConnectedLayer(config->get_name(),
-                                                          params["in_features"],
-                                                          params["out_features"],
-                                                          params["has_bias"]));
-        CAFFEBEAN_LOG(type << ": " << config->get_name() << " done.");
-        return fc;
-    } else if (type == "L1Loss") {
-        auto params = config->get_params();
-        if (params.find("reduction") != params.end()) {
-            std::unique_ptr<Layer> l1loss(new L1LossLayer(config->get_name(), params["reduction"]));
-            CAFFEBEAN_LOG(type << ": " << config->get_name() << " done.");
-            return l1loss;
-        } else {
-            std::unique_ptr<Layer> l1loss(new L1LossLayer(config->get_name()));
-            CAFFEBEAN_LOG(type << ": " << config->get_name() << " done.");
-            return l1loss;
-        }
-    } else if (type == "Relu") {
-        std::unique_ptr<Layer> relu(new ReluLayer(config->get_name()));
-        CAFFEBEAN_LOG(type << ": " << config->get_name() << " done.");
-        return relu;
-    } else if (type == "Pooling") {
-        auto params = config->get_params();
-        std::string pool_type;
-        if (params["type"] == 0) { //TODO: this shouldn't happen
-            pool_type = "MAX";
-        } else {
-            pool_type = "AVERAGE";
-        }
-        std::unique_ptr<Layer> pooling(
-                new PoolingLayer(config->get_name(), pool_type, params["kernel_size"], params["stride"],
-                                 params["padding"], params["dilation"], params["ceil_mode"]));
-        CAFFEBEAN_LOG(type << ": " << config->get_name() << " done.");
-        return pooling;
-    } else {
-        CAFFEBEAN_LOG(type << ": " << config->get_name() << " not implmented.");
-    }
+LayerFactory::LayerFactory() {
+    register_all_layers();
 }
+
+/*
+ * If you would like to create a new layer,
+ * there are 3 steps:
+ * 1. Finish my_magic_layer.cpp & my_magic_layer.h
+ * 2. Add REGISTER_LAYER(MyMagic) below
+ * 3. Add ADD_CREATOR(MyMagic) in LayerFactory::register_all_layers()
+ * that's all!
+ */
+
+REGISTER_LAYER(Input)
+
+REGISTER_LAYER(FullyConnected)
+
+REGISTER_LAYER(L1Loss)
+
+REGISTER_LAYER(Relu)
+
+REGISTER_LAYER(Pooling)
+
+void LayerFactory::register_all_layers() {
+    ADD_CREATOR(Input)
+    ADD_CREATOR(FullyConnected)
+    ADD_CREATOR(L1Loss)
+    ADD_CREATOR(Relu)
+    ADD_CREATOR(Pooling)
+}
+
+void LayerFactory::add_creator(const std::string &type, Creator creator_func) {
+    creator_registry_[type] = creator_func;
+}
+
+std::unique_ptr<Layer> LayerFactory::create_layer(const std::shared_ptr<Config> &config) {
+    auto type = config->get_type();
+    std::unique_ptr<Layer> layer = creator_registry_[type](config);
+    CAFFEBEAN_LOG(type << ": " << config->get_name() << " done.");
+    return layer;
+}
+

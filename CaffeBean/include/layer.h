@@ -9,6 +9,7 @@
 #include "common.h"
 #include "init.h"
 #include "math_function.h"
+#include "config.h"
 
 class Layer {
 protected:

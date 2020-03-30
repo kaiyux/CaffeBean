@@ -11,6 +11,8 @@ class ReluLayer : public Layer {
 public:
     ReluLayer(const std::string &name);
 
+    ReluLayer(const std::shared_ptr<Config> &config);
+
     void init_layer(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top);
 
     void forward(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top);

@@ -14,6 +14,15 @@ L1LossLayer::L1LossLayer(const std::string &name, int reduction) : Layer(name) {
     reduction_ = reduction;
 }
 
+L1LossLayer::L1LossLayer(const std::shared_ptr<Config> &config) : Layer(config->get_name()) {
+    auto params = config->get_params();
+    if (params.find("reduction") != params.end()) {
+        reduction_ = params["reduction"];
+    } else {
+        reduction_ = MEAN;
+    }
+}
+
 L1LossLayer::~L1LossLayer() {}
 
 void L1LossLayer::init_layer(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) {

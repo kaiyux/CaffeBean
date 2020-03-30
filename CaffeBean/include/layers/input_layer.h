@@ -12,6 +12,8 @@ private:
 public:
     InputLayer(const std::string &name);
 
+    InputLayer(const std::shared_ptr<Config> &config);
+
     ~InputLayer();
 
     void init_layer(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top);

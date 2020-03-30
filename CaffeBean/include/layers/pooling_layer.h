@@ -21,9 +21,14 @@ private:
 
     std::vector<int> max_index_;
 
+    static const int MAX = 0;
+    static const int AVERAGE = 1;
+
 public:
     PoolingLayer(std::string name, std::string type, int kernel_size, int stride, int padding, int dilation,
                  bool ceil_mode);
+
+    PoolingLayer(const std::shared_ptr<Config> &config);
 
     void init_layer(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top);
 

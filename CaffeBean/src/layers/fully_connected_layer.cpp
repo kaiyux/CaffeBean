@@ -18,6 +18,20 @@ FullyConnectedLayer::FullyConnectedLayer(const std::string &name, int in_feature
     }
 }
 
+FullyConnectedLayer::FullyConnectedLayer(const std::shared_ptr<Config> &config) : Layer(config->get_name()) {
+    CAFFEBEAN_LOG("creating FullyConnectedLayer: " << config->get_name());
+    auto params = config->get_params();
+    in_features_ = params["in_features"];
+    out_features_ = params["out_features"];
+    has_bias_ = params["has_bias"];
+    std::vector<int> weight_shape = {in_features_, out_features_};
+    weight_ = std::make_shared<Bean>(weight_shape);
+    if (has_bias_) {
+        std::vector<int> bias_shape = {out_features_};
+        bias_ = std::make_shared<Bean>(bias_shape);
+    }
+}
+
 FullyConnectedLayer::~FullyConnectedLayer() {
     CAFFEBEAN_LOG("layer " << name_ << " deleted");
 }
@@ -105,5 +119,3 @@ Bean *FullyConnectedLayer::get_bias() {
 std::vector<std::shared_ptr<Bean>> FullyConnectedLayer::get_learnable_beans() {
     return {weight_, bias_};
 }
-
-

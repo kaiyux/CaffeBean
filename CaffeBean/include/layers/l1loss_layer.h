@@ -16,6 +16,8 @@ public:
 
     L1LossLayer(const std::string &name, int reduction);
 
+    L1LossLayer(const std::shared_ptr<Config> &config);
+
     ~L1LossLayer();
 
     void init_layer(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top);
