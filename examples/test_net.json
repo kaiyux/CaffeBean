@@ -6,7 +6,17 @@
     "tops": [
       "fc1",
       "l1loss"
-    ]
+    ],
+    "params": {
+      "input_shape": [
+        2,
+        3
+      ],
+      "label_shape": [
+        2,
+        5
+      ]
+    }
   },
   {
     "name": "fc1",
@@ -19,8 +29,7 @@
     ],
     "params": {
       "in_features": 3,
-      "out_features": 4,
-      "has_bias": 1
+      "out_features": 4
     }
   },
   {
@@ -35,7 +44,7 @@
     "params": {
       "in_features": 4,
       "out_features": 5,
-      "has_bias": 1
+      "has_bias": true
     }
   },
   {

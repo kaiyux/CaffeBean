@@ -57,10 +57,7 @@ void Solver::read_net_config() {
             for (const auto &top:layer["bottoms"]) {
                 config->add_top(top.asString());
             }
-            auto param_keys = layer["params"].getMemberNames();
-            for (auto &param_key : param_keys) {
-                config->add_params(param_key, layer["params"][param_key].asInt());
-            }
+            config->set_params(layer["params"]);
             configs_.push_back(std::move(config));
         }
     } else {

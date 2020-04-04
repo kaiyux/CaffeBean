@@ -36,10 +36,10 @@ std::vector<std::string> Config::get_tops() {
     return tops_;
 }
 
-void Config::add_params(std::string param, int value) {
-    params_[param] = value;
+void Config::set_params(Json::Value params) {
+    params_ = std::move(params);
 }
 
-std::unordered_map<std::string, int> Config::get_params() {
+Json::Value Config::get_params() {
     return params_;
 }

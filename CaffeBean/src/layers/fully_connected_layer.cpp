@@ -21,9 +21,9 @@ FullyConnectedLayer::FullyConnectedLayer(const std::string &name, int in_feature
 FullyConnectedLayer::FullyConnectedLayer(const std::shared_ptr<Config> &config) : Layer(config->get_name()) {
     CAFFEBEAN_LOG("creating FullyConnectedLayer: " << config->get_name());
     auto params = config->get_params();
-    in_features_ = params["in_features"];
-    out_features_ = params["out_features"];
-    has_bias_ = params["has_bias"];
+    in_features_ = params["in_features"].asInt();
+    out_features_ = params["out_features"].asInt();
+    has_bias_ = params["has_bias"].asBool();
     std::vector<int> weight_shape = {in_features_, out_features_};
     weight_ = std::make_shared<Bean>(weight_shape);
     if (has_bias_) {
@@ -100,12 +100,14 @@ void FullyConnectedLayer::backward(std::vector<std::shared_ptr<Bean>> &bottom,
     matrix_multiply(x_transpose, top[0]->diff_, weight_->diff_,
                     in_features_, bottom[0]->size_ / in_features_, top_n, out_features_);
 
-    // db = bias_multiplier_.T * dy
-    auto bm_transpose = new float[bias_->size_]();
-    matrix_transpose(bias_multiplier_->data_, bm_transpose, bias_multiplier_->size_, 1);
-    matrix_multiply(bm_transpose, top[0]->diff_, bias_->diff_,
-                    1, bottom[0]->size_ / bottom[0]->shape_.back(),
-                    bottom[0]->size_ / bottom[0]->shape_.back(), out_features_);
+    if (has_bias_) {
+        // db = bias_multiplier_.T * dy
+        auto bm_transpose = new float[bias_->size_]();
+        matrix_transpose(bias_multiplier_->data_, bm_transpose, bias_multiplier_->size_, 1);
+        matrix_multiply(bm_transpose, top[0]->diff_, bias_->diff_,
+                        1, bottom[0]->size_ / bottom[0]->shape_.back(),
+                        bottom[0]->size_ / bottom[0]->shape_.back(), out_features_);
+    }
 }
 
 Bean *FullyConnectedLayer::get_weight() {
@@ -117,5 +119,9 @@ Bean *FullyConnectedLayer::get_bias() {
 }
 
 std::vector<std::shared_ptr<Bean>> FullyConnectedLayer::get_learnable_beans() {
-    return {weight_, bias_};
+    if (has_bias_) {
+        return {weight_, bias_};
+    } else {
+        return {weight_};
+    }
 }

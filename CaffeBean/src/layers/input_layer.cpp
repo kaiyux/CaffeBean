@@ -10,6 +10,13 @@ InputLayer::InputLayer(const std::string &name) : Layer(name) {
 
 InputLayer::InputLayer(const std::shared_ptr<Config> &config) : Layer(config->get_name()) {
     CAFFEBEAN_LOG("creating InputLayer: " << config->get_name() << " ...");
+    auto params = config->get_params();
+    for (const auto &i:params["input_shape"]) {
+        input_shape_.push_back(i.asInt());
+    }
+    for (const auto &i:params["label_shape"]) {
+        label_shape_.push_back(i.asInt());
+    }
 }
 
 InputLayer::~InputLayer() {
@@ -17,10 +24,9 @@ InputLayer::~InputLayer() {
 }
 
 void InputLayer::init_layer(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) {
-    std::vector<int> input_shape = {2, 3};
-    std::vector<int> label_shape = {2, 5};
-    top[0]->reshape(input_shape);
-    top[1]->reshape(label_shape);
+    CAFFEBEAN_LOG("initializing InputLayer: " << name_ << " ...");
+    top[0]->reshape(input_shape_);
+    top[1]->reshape(label_shape_);
 }
 
 void InputLayer::forward(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) {

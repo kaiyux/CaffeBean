@@ -9,6 +9,7 @@
 
 class InputLayer : public Layer {
 private:
+    std::vector<int> input_shape_, label_shape_;
 public:
     InputLayer(const std::string &name);
 

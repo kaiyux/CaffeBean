@@ -4,22 +4,16 @@
 
 #include "../../include/layers/l1loss_layer.h"
 
-L1LossLayer::L1LossLayer(const std::string &name) : Layer(name) {
-    reduction_ = MEAN;
-}
-
-L1LossLayer::L1LossLayer(const std::string &name, int reduction) : Layer(name) {
-    CAFFEBEAN_ASSERT(reduction == NONE || reduction == MEAN || reduction == SUM,
-                     "reduction should be one of: none, mean, sum");
-    reduction_ = reduction;
-}
-
 L1LossLayer::L1LossLayer(const std::shared_ptr<Config> &config) : Layer(config->get_name()) {
+    CAFFEBEAN_LOG("creating L1LossLayer: " << config->get_name());
     auto params = config->get_params();
-    if (params.find("reduction") != params.end()) {
-        reduction_ = params["reduction"];
+    if (params["reduction"].isString()) {
+        auto reduction = params["reduction"].asString();
+        CAFFEBEAN_ASSERT(reduction == "NONE" || reduction == "MEAN" || reduction == "SUM",
+                         "reduction should be one of: \"NONE\", \"MEAN\", \"SUM\"");
+        reduction_ = reduction;
     } else {
-        reduction_ = MEAN;
+        reduction_ = "MEAN";
     }
 }
 
@@ -27,12 +21,10 @@ L1LossLayer::~L1LossLayer() {}
 
 void L1LossLayer::init_layer(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) {
     CAFFEBEAN_LOG("initializing L1LossLayer: " << name_ << " ...");
-    const int size = bottom[0]->size_;
-    const int N = bottom[0]->shape_[0];
     diff_ = new Bean(bottom[0]->shape_);
 
     std::vector<int> top_shape;
-    if (reduction_ == NONE) {
+    if (reduction_ == "NONE") {
         top_shape = bottom[0]->shape_;
     } else {
         top_shape = {1};
@@ -56,9 +48,9 @@ void L1LossLayer::forward(std::vector<std::shared_ptr<Bean>> &bottom, std::vecto
     matrix_abs(diff_->data_, top[0]->data_, N, size / N);
 
     // if reduction = SUM or MEAN, the result will be a scalar
-    if (reduction_ == SUM || reduction_ == MEAN) {
+    if (reduction_ == "SUM" || reduction_ == "MEAN") {
         float res = matrix_sum(top[0]->data_, 1, top[0]->size_);
-        if (reduction_ == MEAN) {
+        if (reduction_ == "MEAN") {
             res /= (float) size;
         }
         top[0]->data_[0] = res;
@@ -72,7 +64,7 @@ void L1LossLayer::backward(std::vector<std::shared_ptr<Bean>> &bottom, std::vect
     for (int i = 0; i < 2; ++i) {
         const float sign = (i == 0) ? 1 : -1;
         float alpha;
-        if (reduction_ == MEAN) {
+        if (reduction_ == "MEAN") {
             alpha = sign * top[0]->diff_[0] / (float) bottom[i]->size_;
         } else {
             alpha = sign * top[0]->diff_[0];
@@ -81,7 +73,7 @@ void L1LossLayer::backward(std::vector<std::shared_ptr<Bean>> &bottom, std::vect
     }
 }
 
-int L1LossLayer::get_reduction() {
+std::string L1LossLayer::get_reduction() {
     return reduction_;
 }
 

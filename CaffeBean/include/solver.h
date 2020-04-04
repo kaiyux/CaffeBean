@@ -6,7 +6,6 @@
 #define CAFFEBEAN_SOLVER_H
 
 #include "../../lib/jsoncpp/include/json/json.h"
-#include <iostream>
 #include <fstream>
 #include "config.h"
 

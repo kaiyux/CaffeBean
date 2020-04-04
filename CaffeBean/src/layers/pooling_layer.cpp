@@ -19,15 +19,16 @@ PoolingLayer::PoolingLayer(std::string name, std::string type, int kernel_size, 
 
 PoolingLayer::PoolingLayer(const std::shared_ptr<Config> &config) : Layer(config->get_name()) {
     auto params = config->get_params();
-    CAFFEBEAN_ASSERT(params["type"] == MAX || params["type"] == AVERAGE,
-                     "type of PoolingLayer must be MAX or AVERAGE");
+    auto type = params["type"].asString();
+    CAFFEBEAN_ASSERT(type == "MAX" || type == "AVERAGE",
+                     "type of PoolingLayer must be \"MAX\" or \"AVERAGE\"");
 
-    type_ = params["type"];
-    kernel_size_ = params["kernel_size"];
-    stride_ = params["stride"];
-    padding_ = params["padding"];
-    dilation_ = params["dilation"];
-    ceil_mode_ = params["ceil_mode"];
+    type_ = type;
+    kernel_size_ = params["kernel_size"].asInt();
+    stride_ = params["stride"].asInt();
+    padding_ = params["padding"].asInt();
+    dilation_ = params["dilation"].asInt();
+    ceil_mode_ = params["ceil_mode"].asBool();
 }
 
 void PoolingLayer::init_layer(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) {

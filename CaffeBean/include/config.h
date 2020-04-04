@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include "../../lib/jsoncpp/include/json/json.h"
 
 class Config {
 private:
@@ -15,7 +16,7 @@ private:
     std::string type_;
     std::vector<std::string> bottoms_;
     std::vector<std::string> tops_;
-    std::unordered_map<std::string, int> params_;
+    Json::Value params_; // TODO: this is not elegant
 public:
     void set_name(std::string name);
 
@@ -33,9 +34,9 @@ public:
 
     std::vector<std::string> get_tops();
 
-    void add_params(std::string param, int value);
+    void set_params(Json::Value params);
 
-    std::unordered_map<std::string, int> get_params();
+    Json::Value get_params();
 };
 
 #endif //CAFFEBEAN_CONFIG_H
