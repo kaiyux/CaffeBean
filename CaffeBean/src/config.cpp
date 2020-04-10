@@ -2,7 +2,7 @@
 // Created by Kaiyu Xie on 2020/2/23.
 //
 
-#include "../include/config.h"
+#include "config.h"
 
 void Config::set_name(std::string name) {
     name_ = name;

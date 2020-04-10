@@ -2,7 +2,7 @@
 // Created by Kaiyu Xie on 2020/2/4.
 //
 
-#include "../../include/layers/input_layer.h"
+#include "layers/input_layer.h"
 
 InputLayer::InputLayer(const std::string &name) : Layer(name) {
     CAFFEBEAN_LOG("creating InputLayer: " << name << " ...");

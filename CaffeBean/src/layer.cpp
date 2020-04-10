@@ -2,7 +2,7 @@
 // Created by Kaiyu Xie on 2019/12/22.
 //
 
-#include "../include/layer.h"
+#include "layer.h"
 
 Layer::Layer(std::string name) {
     name_ = name;

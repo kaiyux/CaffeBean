@@ -2,7 +2,7 @@
 // Created by Kaiyu Xie on 2019/12/22.
 //
 
-#include "../../include/layers/fully_connected_layer.h"
+#include "layers/fully_connected_layer.h"
 
 FullyConnectedLayer::FullyConnectedLayer(const std::string &name, int in_features, int out_features, bool has_bias)
         : Layer(name) {

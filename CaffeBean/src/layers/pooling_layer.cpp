@@ -2,7 +2,7 @@
 // Created by Kaiyu Xie on 2020/3/1.
 //
 
-#include "../../include/layers/pooling_layer.h"
+#include "layers/pooling_layer.h"
 
 PoolingLayer::PoolingLayer(std::string name, std::string type, int kernel_size, int stride, int padding, int dilation,
                            bool ceil_mode) : Layer(name) {

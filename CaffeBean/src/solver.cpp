@@ -2,8 +2,8 @@
 // Created by Kaiyu Xie on 2020/2/23.
 //
 
-#include "../include/solver.h"
-#include "../include/net.h"
+#include "solver.h"
+#include "net.h"
 
 Solver::Solver(std::string train_cfg) {
     read_train_config(train_cfg);

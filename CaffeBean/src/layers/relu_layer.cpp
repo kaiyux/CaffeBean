@@ -2,7 +2,7 @@
 // Created by Kaiyu Xie on 2020/2/29.
 //
 
-#include "../../include/layers/relu_layer.h"
+#include "layers/relu_layer.h"
 
 ReluLayer::ReluLayer(const std::string &name) : Layer(name) {}
 

@@ -2,7 +2,7 @@
 // Created by Kaiyu Xie on 2020/2/24.
 //
 
-#include "../include/layer_factory.h"
+#include "layer_factory.h"
 
 LayerFactory::LayerFactory() {
     register_all_layers();

@@ -2,8 +2,8 @@
 // Created by Kaiyu Xie on 2019/12/22.
 //
 
-#include "../include/net.h"
-#include <layers/input_layer.h>
+#include "net.h"
+#include "layers/input_layer.h"
 
 Net::Net() {}
 

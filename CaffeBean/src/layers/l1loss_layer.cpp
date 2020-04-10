@@ -2,7 +2,7 @@
 // Created by Kaiyu Xie on 2020/2/8.
 //
 
-#include "../../include/layers/l1loss_layer.h"
+#include "layers/l1loss_layer.h"
 
 L1LossLayer::L1LossLayer(const std::shared_ptr<Config> &config) : Layer(config->get_name()) {
     CAFFEBEAN_LOG("creating L1LossLayer: " << config->get_name());
