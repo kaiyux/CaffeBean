@@ -7,7 +7,8 @@ The implementation of this code is heavily borrowed from [Caffe](https://github.
 [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) -- A C++ template library for linear algebra  
 [googletest](https://github.com/google/googletest/tree/master/googletest) -- for unit test  
 [jsoncpp](https://github.com/open-source-parsers/jsoncpp) -- A C++ library for interacting with JSON  
-Note that you *don't* need to install these libraries, just clone the repo by  
+[Boost.Gil](https://github.com/boostorg/gil) -- Generic Image Library  
+Note that all these 3rd-party libraries *except* Boost.Gil had been contained in lib folder, after you have Boost.Gil correctly installed, clone the repo by  
 ```Shell
 git clone https://github.com/SiriusKY/CaffeBean.git
 ```
@@ -22,14 +23,13 @@ Now you are ready to go!
 ```
 ***
 ### 🗓Progress
+* Input Layer
 * Fully Connected Layer  
 * L1 Loss Layer
 * Relu Layer  
 * Pooling Layer(working on it)
 ### ✏️TODO
 * Finish as more layers as possible
-* A good image processor (opencv?)
-* A dataset loader
 * A python API
 ### 💪🏻If by any chance you want to contribute
 * Write the code

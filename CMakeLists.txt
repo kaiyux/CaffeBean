@@ -10,8 +10,15 @@ aux_source_directory(CaffeBean/src/layers LAYERS_LIST)
 include_directories(lib/jsoncpp/include)
 aux_source_directory(lib/jsoncpp/src/lib_json JSON_LIBS)
 
+include_directories(/Users/kaiyu/GitHub/boost_1_72_0/build/include)
+link_directories(/Users/kaiyu/GitHub/boost_1_72_0/build/lib)
+
+include_directories(/Users/kaiyu/workspace/image-libraries/jpeg-9d/build/include)
+link_directories(/Users/kaiyu/workspace/image-libraries/jpeg-9d/build/lib)
+
 add_executable(CaffeBean main.cpp ${LAYERS_LIST} ${SRC_LIST} ${JSON_LIBS})
 
+target_link_libraries(CaffeBean jpeg)
 add_subdirectory(lib)
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
