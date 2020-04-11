@@ -2,6 +2,12 @@
 // Created by Kaiyu Xie on 2020/2/24.
 //
 
+#include "layers/input_layer.h"
+#include "layers/fully_connected_layer.h"
+#include "layers/l1loss_layer.h"
+#include "layers/relu_layer.h"
+#include "layers/pooling_layer.h"
+#include "layers/softmax_loss_layer.h"
 #include "layer_factory.h"
 
 LayerFactory::LayerFactory() {
@@ -27,12 +33,15 @@ REGISTER_LAYER(Relu)
 
 REGISTER_LAYER(Pooling)
 
+REGISTER_LAYER(SoftmaxWithLoss)
+
 void LayerFactory::register_all_layers() {
     ADD_CREATOR(Input)
     ADD_CREATOR(FullyConnected)
     ADD_CREATOR(L1Loss)
     ADD_CREATOR(Relu)
     ADD_CREATOR(Pooling)
+    ADD_CREATOR(SoftmaxWithLoss)
 }
 
 void LayerFactory::add_creator(const std::string &type, Creator creator_func) {

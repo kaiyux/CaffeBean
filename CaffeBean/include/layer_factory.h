@@ -8,11 +8,6 @@
 #include "layer.h"
 #include "config.h"
 #include "common.h"
-#include "layers/input_layer.h"
-#include "layers/fully_connected_layer.h"
-#include "layers/l1loss_layer.h"
-#include "layers/relu_layer.h"
-#include "layers/pooling_layer.h"
 #include <map>
 
 typedef std::unique_ptr<Layer> (*Creator)(const std::shared_ptr<Config> &);

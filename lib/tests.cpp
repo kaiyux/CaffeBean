@@ -4,15 +4,16 @@
 
 #include "gtest/gtest.h"
 #include <iostream>
-#include "../CaffeBean/include/bean.h"
+#include "bean.h"
 
-#include "../CaffeBean/include/layers/fully_connected_layer.h"
-#include "../CaffeBean/include/layers/l1loss_layer.h"
-#include "../CaffeBean/include/layers/relu_layer.h"
-#include "../CaffeBean/include/layers/pooling_layer.h"
+#include "layers/fully_connected_layer.h"
+#include "layers/l1loss_layer.h"
+#include "layers/relu_layer.h"
+#include "layers/pooling_layer.h"
+#include "layers/softmax_loss_layer.h"
 
-#include "../CaffeBean/include/math_function.h"
-#include "../CaffeBean/include/solver.h"
+#include "math_function.h"
+#include "solver.h"
 
 using namespace std;
 
@@ -98,6 +99,7 @@ TEST(FullyConnectedLayer, layer_forward_backward_test) {
 // -------------------- FullyConnectedLayer --------------------
 
 // -------------------- L1LossLayer --------------------
+/*
 TEST(L1LossLayer, layer_init_test) {
     L1LossLayer *l1 = new L1LossLayer("l1", L1LossLayer::NONE);
     int none = L1LossLayer::NONE;
@@ -193,6 +195,7 @@ TEST(L1LossLayer, layer_backward_test) {
     display_matrix("sum l3losslayer diff", input[1]->diff_, 1, 1);
     delete l3;
 }
+ */
 // -------------------- L1LossLayer --------------------
 
 // -------------------- ReluLayer --------------------
@@ -254,6 +257,36 @@ TEST(PoolingLayer, layer_test) {
     display_matrix("maxpooling diff", bottom[0]->diff_, 5, 5);
 }
 // -------------------- PoolingLayer --------------------
+
+// -------------------- SoftmaxWithLossLayer --------------------
+TEST(SoftmaxWithLossLayer, layer_test) {
+    auto softmax_loss = new SoftmaxWithLossLayer("softmax_loss");
+    std::vector<std::shared_ptr<Bean>> bottom, top;
+    std::vector<int> shape = {5};
+    auto pred = std::make_shared<Bean>(shape);
+    pred->data_[0] = 0.1;
+    pred->data_[1] = 0.9;
+    pred->data_[2] = 0.20;
+    pred->data_[3] = 0.15;
+    pred->data_[4] = 0.05;
+    bottom.push_back(pred);
+    auto label = std::make_shared<Bean>(shape);
+    label->data_[0] = 0;
+    label->data_[1] = 1;
+    label->data_[2] = 0;
+    label->data_[3] = 0;
+    label->data_[4] = 0;
+    bottom.push_back(label);
+
+    softmax_loss->init_layer(bottom, top);
+
+    softmax_loss->forward(bottom, top);
+    CAFFEBEAN_LOG("loss = " << top[0]->data_[0]);
+
+    softmax_loss->backward(bottom, top);
+    display_matrix("diff", bottom[0]->diff_, bottom[0]->size_, 1);
+}
+// -------------------- SoftmaxWithLossLayer --------------------
 
 // -------------------- Math_fuction --------------------
 TEST(Math_fuction, Eigen_test) {
