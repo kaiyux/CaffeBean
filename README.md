@@ -27,9 +27,10 @@ Now you are ready to go!
 * Fully Connected Layer  
 * L1 Loss Layer
 * Relu Layer  
-* Pooling Layer(working on it)
+* Pooling Layer(not fully completed)
+* Softmax Loss Layer
 ### ✏️TODO
-* Finish as more layers as possible
+* Finish as more layers as possible (*important*:Conv Layer)
 * A python API
 ### 💪🏻If by any chance you want to contribute
 * Write the code
