@@ -29,7 +29,7 @@ Now you are ready to go!
 * Relu Layer  
 * Pooling Layer(not fully completed)
 * Softmax Loss Layer
-* Convolution Layer(working on it)
+* Convolution Layer
 ### ✏️TODO
 * Finish as more layers as possible (*important*:Conv Layer)
 * A python API

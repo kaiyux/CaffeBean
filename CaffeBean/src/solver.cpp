@@ -85,6 +85,7 @@ void Solver::solve() {
         net->forward();
         net->backward();
         net->update(learning_rate_);
+        // TODO: zero the diff
     }
     net->save(model_path_);
     auto tok = time(nullptr);

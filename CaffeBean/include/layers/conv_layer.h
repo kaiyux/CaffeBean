@@ -20,6 +20,7 @@ private:
     std::shared_ptr<Bean> weight_, bias_;
 
     int N_, H_in_, W_in_, H_out_, W_out_;
+    float *input_matrix_, *conv_kernel_matrix_;
 public:
     ConvolutionLayer(std::string name, int in_channels, int out_channels, int kernel_size, int stride,
                      int padding, int dilation, bool has_bias);

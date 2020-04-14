@@ -313,6 +313,23 @@ TEST(ConvolutionLayer, layer_test) {
     auto output_features = std::make_shared<Bean>(output_shape);
     top.push_back(output_features);
 
+    /* test
+    std::vector<int> nums = {1, 1,
+                             2, 2,
+                             1, 1,
+                             1, 1,
+                             0, 1,
+                             1, 0,
+                             1, 0,
+                             0, 1,
+                             2, 1,
+                             2, 1,
+                             1, 2,
+                             2, 0};
+    for (int i = 0; i < nums.size(); ++i) {
+        weight_->data_[i] = nums[i];
+    }
+    test */
     conv->init_layer(bottom, top);
 
     conv->forward(bottom, top);
