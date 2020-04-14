@@ -11,6 +11,7 @@
 #include "layers/relu_layer.h"
 #include "layers/pooling_layer.h"
 #include "layers/softmax_loss_layer.h"
+#include "layers/conv_layer.h"
 
 #include "math_function.h"
 #include "solver.h"
@@ -287,6 +288,41 @@ TEST(SoftmaxWithLossLayer, layer_test) {
     display_matrix("diff", bottom[0]->diff_, bottom[0]->size_, 1);
 }
 // -------------------- SoftmaxWithLossLayer --------------------
+
+// -------------------- ConvolutionLayer --------------------
+TEST(ConvolutionLayer, layer_test) {
+    auto conv = new ConvolutionLayer("conv", 3, 2, 2, 1, 0, 1, true);
+    std::vector<std::shared_ptr<Bean>> bottom, top;
+    std::vector<int> input_shape = {1, 3, 3, 3};
+    auto input_features = std::make_shared<Bean>(input_shape);
+    std::vector<int> nums = {1, 2, 0,
+                             1, 1, 3,
+                             0, 2, 2,
+                             0, 2, 1,
+                             0, 3, 2,
+                             1, 1, 0,
+                             1, 2, 1,
+                             0, 1, 3,
+                             3, 3, 2};
+    for (int i = 0; i < nums.size(); ++i) {
+        input_features->data_[i] = nums[i];
+    }
+    bottom.push_back(input_features);
+
+    std::vector<int> output_shape = {1, 2, 2, 2};
+    auto output_features = std::make_shared<Bean>(output_shape);
+    top.push_back(output_features);
+
+    conv->init_layer(bottom, top);
+
+    conv->forward(bottom, top);
+
+    for (int i = 0; i < top[0]->size_; ++i) {
+        top[0]->diff_[i] = float(i);
+    }
+    conv->backward(bottom, top);
+}
+// -------------------- ConvolutionLayer --------------------
 
 // -------------------- Math_fuction --------------------
 TEST(Math_fuction, Eigen_test) {
