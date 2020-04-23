@@ -81,7 +81,6 @@ void Solver::solve() {
             CAFFEBEAN_LOG("--------------------");
             CAFFEBEAN_LOG("step: " << i);
             CAFFEBEAN_LOG("loss: " << net->get_loss());
-            display_matrix("output", net->get_output(), 2, 5);
             CAFFEBEAN_LOG("--------------------");
         }
         net->forward();
@@ -93,7 +92,6 @@ void Solver::solve() {
     auto tok = time(nullptr);
     CAFFEBEAN_LOG("total time: " << tok - tik << "s");
     CAFFEBEAN_LOG("loss: " << net->get_loss());
-    display_matrix("output", net->get_output(), 2, 5);
     CAFFEBEAN_LOG("training ended");
 }
 

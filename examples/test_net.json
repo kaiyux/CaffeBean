@@ -9,18 +9,18 @@
     ],
     "params": {
       "input_shape": [
-        1,
+        8,
         1,
         28,
         28
       ],
       "label_shape": [
-        1,
+        8,
         10
       ],
       "label_file": "/Users/kaiyu/workspace/MNIST/train.txt",
       "num_class": 10,
-      "batch_size": 1,
+      "batch_size": 8,
       "mean": 0.1307,
       "std": 0.3081,
       "width": 28,
@@ -39,7 +39,7 @@
     ],
     "params": {
       "output_shape": [
-        1,
+        8,
         784
       ]
     }

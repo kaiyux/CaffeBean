@@ -29,7 +29,7 @@ std::vector<std::vector<float>> Dataset::next_batch() {
 //            batch[(i - cur_pos_) * height_ * width_ + j] = (image[j] - mean_) / std_;
             batch[(i - cur_pos_) * height_ * width_ + j] = image[j] / 255;
         }
-        label[(i - cur_pos_) * batch_size_ * num_class_ + labels_[i]] = 1;
+        label[(i - cur_pos_) * num_class_ + labels_[i]] = 1;
     }
     cur_pos_ += batch_size_;
     if (cur_pos_ > images_.size() - 1) {

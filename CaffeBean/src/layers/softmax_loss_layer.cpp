@@ -20,32 +20,37 @@ void SoftmaxWithLossLayer::init_layer(std::vector<std::shared_ptr<Bean>> &bottom
 
 void SoftmaxWithLossLayer::forward(std::vector<std::shared_ptr<Bean>> &bottom,
                                    std::vector<std::shared_ptr<Bean>> &top) {
-    // Softmax
-    float max_value = bottom[0]->data_[0];
-    for (int i = 1; i < bottom[0]->size_; ++i) {
-        max_value = std::max(bottom[0]->data_[i], max_value);
-    }
-    float sum_exp = 0;
+    CAFFEBEAN_ASSERT(bottom[0]->shape_.size() == 2,
+                     "The shape of SoftmaxWithLossLayer should be [2,x]");
+    CAFFEBEAN_ASSERT(bottom[0]->shape_ == bottom[1]->shape_,
+                     "The shape of 2 beans from bottom should be the same");
+    const int batch_size = bottom[0]->shape_[0];
+    const int num_class = bottom[0]->shape_[1];
     prob_ = new float[bottom[0]->size_]();
-    for (int i = 0; i < bottom[0]->size_; ++i) {
-        prob_[i] = exp(bottom[0]->data_[i] - max_value);
-        sum_exp += prob_[i];
-    }
-    for (int i = 0; i < bottom[0]->size_; ++i) {
-        prob_[i] /= sum_exp;
+
+    // Softmax
+    for (int bs = 0; bs < batch_size; ++bs) {
+        float max_value = -1e9;
+        for (int nc = 0; nc < num_class; ++nc) {
+            max_value = std::max(bottom[0]->data_[bs * num_class + nc], max_value);
+        }
+        float sum_exp = 0;
+        for (int nc = 0; nc < num_class; ++nc) {
+            prob_[bs * num_class + nc] = exp(bottom[0]->data_[bs * num_class + nc] - max_value);
+            sum_exp += prob_[bs * num_class + nc];
+        }
+        for (int nc = 0; nc < num_class; ++nc) {
+            prob_[bs * num_class + nc] /= sum_exp;
+        }
     }
 
     // Cross Entropy Loss
+    float loss_val = 0;
     auto loss = new float[bottom[0]->size_]();
     for (int i = 0; i < bottom[0]->size_; ++i) {
         loss[i] = -log(prob_[i]);
-    }
-
-    float loss_val = 0;
-    for (int i = 0; i < bottom[1]->size_; ++i) {
         if (bottom[1]->data_[i] == 1) {
-            loss_val = loss[i];
-            break;
+            loss_val += loss[i];
         }
     }
     top[0]->data_[0] = loss_val;
