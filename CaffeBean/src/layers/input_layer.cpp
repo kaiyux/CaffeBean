@@ -17,6 +17,15 @@ InputLayer::InputLayer(const std::shared_ptr<Config> &config) : Layer(config->ge
     for (const auto &i:params["label_shape"]) {
         label_shape_.push_back(i.asInt());
     }
+    dataset_ = std::make_shared<Dataset>(
+            params["label_file"].asString(), params["num_class"].asInt(), params["batch_size"].asInt(),
+            params["width"].asInt(), params["height"].asInt(), params["shuffle"].asBool());
+    if (params["mean"]) {
+        dataset_->set_mean(params["mean"].asFloat());
+    }
+    if (params["std"]) {
+        dataset_->set_std(params["std"].asFloat());
+    }
 }
 
 InputLayer::~InputLayer() {
@@ -30,13 +39,14 @@ void InputLayer::init_layer(std::vector<std::shared_ptr<Bean>> &bottom, std::vec
 }
 
 void InputLayer::forward(std::vector<std::shared_ptr<Bean>> &bottom, std::vector<std::shared_ptr<Bean>> &top) {
-    // TODO: temporarily using given bean
-    float input[6] = {6.87926, 4.36403, 5.73078, 5.96791, 5.55232, 5.73246};
-    for (int i = 0; i < 2 * 3; ++i) {
+    auto next_batch = dataset_->next_batch();
+    auto input = next_batch[0];
+    auto label = next_batch[1];
+    for (int i = 0; i < input.size(); ++i) {
         top[0]->data_[i] = input[i];
     }
-    for (int i = 0; i < 2 * 5; ++i) {
-        top[1]->data_[i] = float(i);
+    for (int i = 0; i < label.size(); ++i) {
+        top[1]->data_[i] = label[i];
     }
 }
 

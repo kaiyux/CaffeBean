@@ -78,14 +78,16 @@ void Solver::solve() {
     auto tik = time(nullptr);
     for (int i = 0; i < step_; ++i) {
         if (i % display_step_ == 0) {
+            CAFFEBEAN_LOG("--------------------");
             CAFFEBEAN_LOG("step: " << i);
             CAFFEBEAN_LOG("loss: " << net->get_loss());
             display_matrix("output", net->get_output(), 2, 5);
+            CAFFEBEAN_LOG("--------------------");
         }
         net->forward();
         net->backward();
         net->update(learning_rate_);
-        // TODO: zero the diff
+        net->zero_diff();
     }
     net->save(model_path_);
     auto tok = time(nullptr);

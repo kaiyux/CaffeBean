@@ -34,6 +34,8 @@ public:
 
     void update(float learning_rate);
 
+    void zero_diff();
+
     void save(std::string path);
 
     void load(std::string path);

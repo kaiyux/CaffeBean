@@ -4,17 +4,43 @@
     "type": "Input",
     "bottoms": [],
     "tops": [
-      "fc1",
+      "reshape",
       "l1loss"
     ],
     "params": {
       "input_shape": [
-        2,
-        3
+        1,
+        1,
+        28,
+        28
       ],
       "label_shape": [
-        2,
-        5
+        1,
+        10
+      ],
+      "label_file": "/Users/kaiyu/workspace/MNIST/train.txt",
+      "num_class": 10,
+      "batch_size": 1,
+      "mean": 0.1307,
+      "std": 0.3081,
+      "width": 28,
+      "height": 28,
+      "shuffle": false
+    }
+  },
+  {
+    "name": "reshape",
+    "type": "Reshape",
+    "bottoms": [
+      "input"
+    ],
+    "tops": [
+      "fc1"
+    ],
+    "params": {
+      "output_shape": [
+        1,
+        784
       ]
     }
   },
@@ -22,40 +48,51 @@
     "name": "fc1",
     "type": "FullyConnected",
     "bottoms": [
-      "input"
+      "reshape"
+    ],
+    "tops": [
+      "relu"
+    ],
+    "params": {
+      "in_features": 784,
+      "out_features": 64,
+      "has_bias": true
+    }
+  },
+  {
+    "name": "relu",
+    "type": "Relu",
+    "bottoms": [
+      "fc1"
     ],
     "tops": [
       "fc2"
-    ],
-    "params": {
-      "in_features": 3,
-      "out_features": 4
-    }
+    ]
   },
   {
     "name": "fc2",
     "type": "FullyConnected",
     "bottoms": [
-      "fc1"
+      "relu"
     ],
     "tops": [
-      "l1loss"
+      "softmaxloss"
     ],
     "params": {
-      "in_features": 4,
-      "out_features": 5,
+      "in_features": 64,
+      "out_features": 10,
       "has_bias": true
     }
   },
   {
-    "name": "l1loss",
-    "type": "L1Loss",
+    "name": "softmaxloss",
+    "type": "SoftmaxWithLoss",
     "bottoms": [
-      "input",
-      "fc2"
+      "fc2",
+      "input"
     ],
     "tops": [
-      "l1loss"
+      "softmaxloss"
     ]
   }
 ]

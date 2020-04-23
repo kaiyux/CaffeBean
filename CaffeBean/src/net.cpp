@@ -81,6 +81,14 @@ void Net::update(float learning_rate) {
     }
 }
 
+void Net::zero_diff() {
+    for (auto bean:learnable_beans_) {
+        for (int i = 0; i < bean->size_; ++i) {
+            bean->diff_[i] = 0;
+        }
+    }
+}
+
 void Net::save(std::string path) {
     for (auto &layer : layers_) {
         if (!layer->get_learnable_beans().empty()) {

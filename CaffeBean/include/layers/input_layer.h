@@ -6,10 +6,12 @@
 #define CAFFEBEAN_INPUT_LAYER_H
 
 #include "layer.h"
+#include "dataset.h"
 
 class InputLayer : public Layer {
 private:
     std::vector<int> input_shape_, label_shape_;
+    std::shared_ptr<Dataset> dataset_;
 public:
     InputLayer(const std::string &name);
 
