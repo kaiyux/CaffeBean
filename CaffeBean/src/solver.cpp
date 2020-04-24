@@ -71,10 +71,10 @@ std::vector<std::shared_ptr<Config>> Solver::get_configs() {
 }
 
 void Solver::solve() {
-    CAFFEBEAN_LOG("start training...");
     Net *net = new Net();
     net->init_net(configs_);
 
+    CAFFEBEAN_LOG("start training...");
     auto tik = time(nullptr);
     for (int i = 0; i < step_; ++i) {
         if (i % display_step_ == 0) {
@@ -96,18 +96,22 @@ void Solver::solve() {
 }
 
 void Solver::infer() {
-    CAFFEBEAN_LOG("inferring");
     Net *net = new Net();
     net->init_net(configs_);
     net->load(model_path_);
 
+    CAFFEBEAN_LOG("inferring");
     auto tik = time(nullptr);
-    net->forward();
+    float acc = 0;
+    for (int i = 0; i < step_; ++i) {
+        net->forward();
+        acc += net->get_loss();
+    }
     auto tok = time(nullptr);
+    acc /= float(step_);
 
     CAFFEBEAN_LOG("total time: " << tok - tik << "s");
-    CAFFEBEAN_LOG("loss: " << net->get_loss());
-    display_matrix("output", net->get_output(), 2, 5);
+    CAFFEBEAN_LOG("acc: " << acc);
     CAFFEBEAN_LOG("inferring ended");
 }
 

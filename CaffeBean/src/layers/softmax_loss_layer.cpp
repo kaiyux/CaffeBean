@@ -21,7 +21,7 @@ void SoftmaxWithLossLayer::init_layer(std::vector<std::shared_ptr<Bean>> &bottom
 void SoftmaxWithLossLayer::forward(std::vector<std::shared_ptr<Bean>> &bottom,
                                    std::vector<std::shared_ptr<Bean>> &top) {
     CAFFEBEAN_ASSERT(bottom[0]->shape_.size() == 2,
-                     "The shape of SoftmaxWithLossLayer should be [2,x]");
+                     "The shape of SoftmaxWithLossLayer should be [batch_size, num_class]");
     CAFFEBEAN_ASSERT(bottom[0]->shape_ == bottom[1]->shape_,
                      "The shape of 2 beans from bottom should be the same");
     const int batch_size = bottom[0]->shape_[0];

@@ -22,7 +22,11 @@ Dataset::Dataset(const std::string &label_file, int num_class, int batch_size, i
 
 std::vector<std::vector<float>> Dataset::next_batch() {
     std::vector<float> batch(batch_size_ * 1 * height_ * width_, 0);
+    // TODO: should be batch_size_ * channel * height_ * width_
     std::vector<float> label(batch_size_ * num_class_, 0);
+    if (cur_pos_ + batch_size_ > images_.size()) {
+        cur_pos_ = 0;
+    }
     for (int i = cur_pos_; i < cur_pos_ + batch_size_; ++i) {
         auto image = load_gray_img(images_[i]); // TODO: transform if image isn't of the shape wigth*height
         for (int j = 0; j < height_ * width_; ++j) {
@@ -32,9 +36,6 @@ std::vector<std::vector<float>> Dataset::next_batch() {
         label[(i - cur_pos_) * num_class_ + labels_[i]] = 1;
     }
     cur_pos_ += batch_size_;
-    if (cur_pos_ > images_.size() - 1) {
-        cur_pos_ = 0;
-    }
     return {batch, label};
 }
 

@@ -10,6 +10,7 @@
 #include "layers/softmax_loss_layer.h"
 #include "layers/conv_layer.h"
 #include "layers/reshape.layer.h"
+#include "layers/accuracy_layer.h"
 #include "layer_factory.h"
 
 LayerFactory::LayerFactory() {
@@ -41,6 +42,8 @@ REGISTER_LAYER(Convolution)
 
 REGISTER_LAYER(Reshape)
 
+REGISTER_LAYER(Accuracy)
+
 void LayerFactory::register_all_layers() {
     ADD_CREATOR(Input)
     ADD_CREATOR(FullyConnected)
@@ -50,6 +53,7 @@ void LayerFactory::register_all_layers() {
     ADD_CREATOR(SoftmaxWithLoss)
     ADD_CREATOR(Convolution)
     ADD_CREATOR(Reshape)
+    ADD_CREATOR(Accuracy)
 }
 
 void LayerFactory::add_creator(const std::string &type, Creator creator_func) {

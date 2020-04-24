@@ -5,22 +5,22 @@
     "bottoms": [],
     "tops": [
       "reshape",
-      "l1loss"
+      "accuracy"
     ],
     "params": {
       "input_shape": [
-        8,
+        16,
         1,
         28,
         28
       ],
       "label_shape": [
-        8,
+        16,
         10
       ],
-      "label_file": "/Users/kaiyu/workspace/MNIST/train.txt",
+      "label_file": "/Users/kaiyu/workspace/MNIST/test.txt",
       "num_class": 10,
-      "batch_size": 8,
+      "batch_size": 16,
       "mean": 0.1307,
       "std": 0.3081,
       "width": 28,
@@ -39,7 +39,7 @@
     ],
     "params": {
       "output_shape": [
-        8,
+        16,
         784
       ]
     }
@@ -76,7 +76,7 @@
       "relu"
     ],
     "tops": [
-      "softmaxloss"
+      "accuracy"
     ],
     "params": {
       "in_features": 64,
@@ -85,14 +85,14 @@
     }
   },
   {
-    "name": "softmaxloss",
-    "type": "SoftmaxWithLoss",
+    "name": "accuracy",
+    "type": "Accuracy",
     "bottoms": [
       "fc2",
       "input"
     ],
     "tops": [
-      "softmaxloss"
+      "accuracy"
     ]
   }
 ]

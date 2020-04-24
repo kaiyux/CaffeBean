@@ -31,6 +31,7 @@ Now you are ready to go!
 * Softmax Loss Layer
 * Convolution Layer
 * Reshape Layer
+* Accuracy Layer
 ### ✏️TODO
 * Finish as more layers as possible (*important*:Conv Layer)
 * A python API
