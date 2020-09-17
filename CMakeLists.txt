@@ -8,15 +8,15 @@ aux_source_directory(CaffeBean/src/layers LAYERS_LIST)
 aux_source_directory(3rdparty/jsoncpp/src/lib_json JSON_LIBS)
 
 find_package(Boost REQUIRED)
+find_package(JPEG REQUIRED)
 
 SET(CAFFEBEAN_INCLUDE_DIRS CaffeBean/include)
 SET(EIGEN_PATH 3rdparty/Eigen)
 SET(JSONCPP_INCLUDE_DIRS 3rdparty/jsoncpp/include)
-SET(JPEG_INCLUDE_DIRS /Users/kaiyu/workspace/image-libraries/jpeg-9d/build/include)
+SET(JPEG_LIBRARIES /usr/local/lib)
 include_directories(${CAFFEBEAN_INCLUDE_DIRS} ${EIGEN_PATH} ${JSONCPP_INCLUDE_DIRS} ${JPEG_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
 
-SET(JPEG_LIBRARY_DIRS /Users/kaiyu/workspace/image-libraries/jpeg-9d/build/lib)
-link_directories(${JPEG_LIBRARY_DIRS} ${Boost_LIBRARY_DIRS})
+link_directories(${JPEG_LIBRARIES} ${Boost_LIBRARY_DIRS})
 
 add_executable(CaffeBean main.cpp ${LAYERS_LIST} ${SRC_LIST} ${JSON_LIBS})
 

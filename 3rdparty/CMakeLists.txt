@@ -16,8 +16,9 @@ aux_source_directory(./jsoncpp/src/lib_json JSON_LIBS__FOR_TEST)
 
 include_directories(./Eigen)
 
-include_directories(/Users/kaiyu/workspace/image-libraries/jpeg-9d/build/include)
-link_directories(/Users/kaiyu/workspace/image-libraries/jpeg-9d/build/lib)
+find_package(JPEG REQUIRED)
+include_directories(${JPEG_INCLUDE_DIRS})
+link_directories(/usr/local/lib)
 
 add_executable(Google_Tests_run ./tests.cpp ${SRC_LIST_FOR_TEST} ${LAYERS_LIST_FOR_TEST} ${JSON_LIBS__FOR_TEST})
 target_link_libraries(Google_Tests_run jpeg)
