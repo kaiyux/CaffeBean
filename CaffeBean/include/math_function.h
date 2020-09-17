@@ -5,7 +5,7 @@
 #ifndef CAFFEBEAN_MATH_FUNCTION_H
 #define CAFFEBEAN_MATH_FUNCTION_H
 
-#include <../../lib/Eigen/Dense>
+#include <Eigen>
 #include "common.h"
 
 using namespace Eigen;

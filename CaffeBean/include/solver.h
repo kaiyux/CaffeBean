@@ -5,7 +5,7 @@
 #ifndef CAFFEBEAN_SOLVER_H
 #define CAFFEBEAN_SOLVER_H
 
-#include "../../lib/jsoncpp/include/json/json.h"
+#include <json/json.h>
 #include <fstream>
 #include "config.h"
 

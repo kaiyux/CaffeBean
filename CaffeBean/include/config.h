@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include "../../lib/jsoncpp/include/json/json.h"
+#include <json/json.h>
 
 class Config {
 private:
